@@ -11,4 +11,10 @@
     <PackageReference Include="xunit" Version="2.9.2" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\BuisnessLayer\BuisnessLayer.csproj" />
+    <ProjectReference Include="..\DataLayer\DataAcessLayer.csproj" />
+    <ProjectReference Include="..\WebServiceLayer\WebServiceLayer.csproj" />
+  </ItemGroup>
+
 </Project>
