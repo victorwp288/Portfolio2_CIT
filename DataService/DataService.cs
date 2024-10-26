@@ -1,4 +1,4 @@
-﻿using DataAccessLayer;
+﻿using DataLayer;
 using Microsoft.EntityFrameworkCore;
 
 namespace DataService;

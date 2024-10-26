@@ -12,16 +12,15 @@ namespace DataLayer
     {
         public int UserId { get; set; }
 
-        [Key]
-        [Column(Order = 1)]
-        public string Tconst { get; set; } // Assuming Tconst is a string in C#
+        [StringLength(10)]
+        public string Tconst { get; set; } 
 
-        public string Note { get; set; }
+        public string? Note { get; set; }
 
         [DataType(DataType.DateTime)]
         public DateTime BookmarkDate { get; set; }
 
-        // Navigation Properties (optional, for relationships with other entities)
+        // Navigation Properties 
         public User User { get; set; }
         public TitleBasic TitleBasic { get; set; }
     }

@@ -13,6 +13,6 @@ namespace DataLayer
         public string Email { get; set; }
         public string PasswordHash { get; set; }
         public DateTime CreatedAt { get; set; }
-        public string Role { get; set; } // Use string
+        public string Role { get; set; } 
     }
 }

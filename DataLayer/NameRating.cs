@@ -13,12 +13,12 @@ namespace DataLayer
         [StringLength(10)] // Ensures the Nconst property is exactly 10 characters long
         public string Nconst { get; set; }
 
-        [MaxLength(255)] // Sets the maximum length of the primary name
+        [MaxLength(255)] // Sets the maximum length 
         public string PrimaryName { get; set; }
 
-        public decimal WeightedRating { get; set; } // Use decimal for NUMERIC data type
+        public decimal WeightedRating { get; set; } // Useing decimal for NUMERIC data type
 
-        // Navigation Properties (optional, for relationships with other entities)
+        // Navigation Properties 
         public NameBasic NameBasic { get; set; }
     }
 }

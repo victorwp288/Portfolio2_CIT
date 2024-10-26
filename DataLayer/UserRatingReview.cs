@@ -11,13 +11,11 @@ namespace DataLayer
     public class UserRatingReview
     {
        
-        [Key]
-        [Column(Order = 0)]
+     
         public int UserId { get; set; }
-
-        [Key]
-        [Column(Order = 1)]
-        public string Tconst { get; set; } // Assuming Tconst is a string in C#
+        
+        [StringLength(10)]
+        public string Tconst { get; set; } 
 
         [Range(1, 10)] // Data annotation for rating range
         public int Rating { get; set; }
@@ -27,9 +25,10 @@ namespace DataLayer
         [DataType(DataType.DateTime)]
         public DateTime ReviewDate { get; set; }
 
-        // Navigation Properties (optional)
+        // Navigation Properties 
         public User User { get; set; }
         public TitleBasic TitleBasic { get; set; }
+
         
     }
 }
