@@ -31,6 +31,12 @@ public class DataServiceTests
         Assert.Equal("testuser1@example.com", items.First().Email);
         Assert.Equal("testuser2", items.Last().Username);
     }
-    
 
-}
+    [Fact]
+    public void User_GetUserById()
+    {
+        var service = new DataService.DataService();
+        var item = service.GetUserById(1);
+        Assert.Equal("testuser1", item.Username);
+        Assert.Equal("testuser1@example.com", item.Email);        
+    }

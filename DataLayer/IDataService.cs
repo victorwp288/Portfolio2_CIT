@@ -9,6 +9,8 @@ namespace DataLayer
     public interface IDataService
     {
         IList<User> GetUsers();
-        
+
+        User GetUserById(int id);
     }
+
 }
