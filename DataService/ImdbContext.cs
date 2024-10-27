@@ -1,12 +1,15 @@
 ﻿using DataLayer;
 using DataAcessLayer;
 using Microsoft.EntityFrameworkCore;
+using DataAcessLayerFunction;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
+using DataAccessLayerFunction;
+
 
 namespace DataService;
 internal class ImdbContext : DbContext
@@ -20,7 +23,6 @@ internal class ImdbContext : DbContext
     public DbSet<UserSearchHistory> UserSearchHistories { get; set; }
     public DbSet<TitleRating> TitleRatings { get; set; }
     public DbSet<Wi> Wis { get; set; }
-
     public DbSet<MovieGenre> MovieGenres { get; set; }
     public DbSet<OmdbData> OmdbDatas { get; set; }
     public DbSet<PersonKnownTitle> PersonKnownTitles { get; set; }
@@ -29,7 +31,14 @@ internal class ImdbContext : DbContext
     public DbSet<TitleCrew> TitleCrews { get; set; }
     public DbSet<TitleEpisode> TitleEpisodes { get; set; }
     public DbSet<TitlePrincipal> TitlePrincipals { get; set; }
-    
+    //functions
+    public DbSet<TconstAndPrimaryTitle> TconstAndPrimaryTitles { get; set; }
+    public DbSet<WordAndFrequency> WordAndFrequencies { get; set; }
+    public DbSet<BestMatchQuery> BestMatchQueries{ get; set; }
+    public DbSet<GetMovieActorsByPopularity> GetMovieActorsByPopularity { get; set; }
+    public DbSet<SearchCoPlayer> SearchCoPlayers { get; set; }
+    public DbSet<SearchName> SearchNames { get; set; }
+
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         optionsBuilder.LogTo(Console.WriteLine, Microsoft.Extensions.Logging.LogLevel.Information);
@@ -38,6 +47,7 @@ internal class ImdbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        //Tables
         modelBuilder.Entity<User>().ToTable("users");
         modelBuilder.Entity<User>().Property(x => x.UserId).HasColumnName("user_id");
         modelBuilder.Entity<User>().Property(x => x.Username).HasColumnName("username");
@@ -87,6 +97,7 @@ internal class ImdbContext : DbContext
         modelBuilder.Entity<UserSearchHistory>().Property(x => x.UserId).HasColumnName("user_id");
         modelBuilder.Entity<UserSearchHistory>().Property(x => x.SearchQuery).HasColumnName("search_query");
         modelBuilder.Entity<UserSearchHistory>().Property(x => x.SearchDate).HasColumnName("search_date");
+        modelBuilder.Entity<UserSearchHistory>().HasKey(x => new { x.UserId, x.SearchDate });
 
         modelBuilder.Entity<Wi>().ToTable("wi");
         modelBuilder.Entity<Wi>().Property(x => x.Word).HasColumnName("word");
@@ -176,5 +187,41 @@ internal class ImdbContext : DbContext
         modelBuilder.Entity<TitlePrincipal>().Property(x => x.Category).HasColumnName("category");
         modelBuilder.Entity<TitlePrincipal>().Property(x => x.Job).HasColumnName("job");
         modelBuilder.Entity<TitlePrincipal>().Property(x => x.Characters).HasColumnName("characters");
+        
+        //functions
+        //TconstAndPrimaryTitle
+        modelBuilder.Entity<TconstAndPrimaryTitle>().HasNoKey();
+        modelBuilder.Entity<TconstAndPrimaryTitle>().Property(x => x.Tconst).HasMaxLength(10).HasColumnName("tconst");
+        modelBuilder.Entity<TconstAndPrimaryTitle>().Property(x => x.PrimaryTitle).HasColumnName("primarytitle");
+       
+        //WordAndFrequency
+        modelBuilder.Entity<WordAndFrequency>().HasNoKey();
+        modelBuilder.Entity<WordAndFrequency>().Property(x => x.Word).HasColumnName("word");
+        modelBuilder.Entity<WordAndFrequency>().Property(x => x.Frequency).HasColumnName("frequency");
+        
+        //BestMatchQuery
+        modelBuilder.Entity<BestMatchQuery>().HasNoKey();
+        modelBuilder.Entity<BestMatchQuery>().Property(x => x.Tconst).HasMaxLength(10).HasColumnName("tconst");
+        modelBuilder.Entity<BestMatchQuery>().Property(x => x.PrimaryTitle).HasColumnName("primarytitle");
+        modelBuilder.Entity<BestMatchQuery>().Property(x => x.Rank).HasColumnName("rank");
+        
+        //GetMovieActorsByPopularity
+        modelBuilder.Entity<GetMovieActorsByPopularity>().HasNoKey();
+        modelBuilder.Entity<GetMovieActorsByPopularity>().Property(x => x.Nconst).HasColumnName("nconst");
+        modelBuilder.Entity<GetMovieActorsByPopularity>().Property(x => x.PrimaryName).HasColumnName("primaryname");
+        modelBuilder.Entity<GetMovieActorsByPopularity>().Property(x => x.WeightedRating).HasColumnName("weighted_rating");
+        //SearchCoPlayer
+        modelBuilder.Entity<SearchCoPlayer>().HasNoKey();
+        modelBuilder.Entity<SearchCoPlayer>().Property(x => x.Nconst).HasColumnName("nconst");
+        modelBuilder.Entity<SearchCoPlayer>().Property(x => x.PrimaryName).HasColumnName("primaryname");
+        modelBuilder.Entity<SearchCoPlayer>().Property(x => x.Frequency).HasColumnName("frequency");
+        
+        //SearchName
+        modelBuilder.Entity<SearchName>().HasNoKey();
+        modelBuilder.Entity<SearchName>().Property(x => x.Tconst).HasMaxLength(10).HasColumnName("tconst");
+        modelBuilder.Entity<SearchName>().Property(x => x.PrimaryTitle).HasColumnName("primarytitle");
+        modelBuilder.Entity<SearchName>().Property(x => x.Nconst).HasColumnName("nconst");
+        modelBuilder.Entity<SearchName>().Property(x => x.PrimaryName).HasColumnName("primaryname");
+
     }
 }
