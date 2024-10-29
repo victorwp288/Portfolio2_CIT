@@ -22,8 +22,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\BuisnessLayer\BuisnessLayer.csproj" />
-    <ProjectReference Include="..\DataLayer\DataAcessLayer.csproj" />
-    <ProjectReference Include="..\DataService\DataService.csproj" />
+    <ProjectReference Include="..\DataAcessLayer\DataAcessLayer.csproj" />
     <ProjectReference Include="..\WebServiceLayer\WebServiceLayer.csproj" />
   </ItemGroup>
 

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Xunit;
-using DataService;
+using DataAcessLayer.Users;
 
 namespace Portfolio2_Tests;
 
@@ -24,7 +24,7 @@ public class DataServiceTests
     [Fact]
     public void User_GetUsers()
     {
-        var service = new DataService.DataService();
+        var service = new DataService();
         var items = service.GetUsers();
         Assert.Equal(2, items.Count);
         Assert.Equal("testuser1", items.First().Username);
@@ -35,8 +35,9 @@ public class DataServiceTests
     [Fact]
     public void User_GetUserById()
     {
-        var service = new DataService.DataService();
+        var service = new DataService();
         var item = service.GetUserById(1);
         Assert.Equal("testuser1", item.Username);
-        Assert.Equal("testuser1@example.com", item.Email);        
+        Assert.Equal("testuser1@example.com", item.Email);
     }
+}
