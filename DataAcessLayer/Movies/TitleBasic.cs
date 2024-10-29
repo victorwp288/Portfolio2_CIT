@@ -25,5 +25,10 @@ namespace DataAcessLayer.Movies
         public string? EndYear { get; set; }
         public int? RunTimeMinutes { get; set; }
 
+        public ICollection<PersonKnownTitle> PersonKnownTitles { get; set; }
+        public TitleRating TitleRating { get; set; }
+
+        public ICollection<MovieGenre> MovieGenres { get; set; }
+
     }
 }

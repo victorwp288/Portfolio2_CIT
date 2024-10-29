@@ -11,8 +11,18 @@ using DataAcessLayer.Functions;
 
 
 namespace DataAcessLayer;
-internal class ImdbContext : DbContext
+public class ImdbContext : DbContext
 {
+
+    public ImdbContext()
+    {
+    }
+
+    public ImdbContext(DbContextOptions<ImdbContext> options)
+    : base(options)
+    {
+    }
+
     public DbSet<User> Users { get; set; }
     public DbSet<UserBookmark> UserBookmarks { get; set; }
     public DbSet<UserRatingReview> UserRatingReviews { get; set; }
@@ -40,8 +50,11 @@ internal class ImdbContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        optionsBuilder.LogTo(Console.WriteLine, Microsoft.Extensions.Logging.LogLevel.Information);
-        optionsBuilder.UseNpgsql("host=localhost;db=imdb;uid=postgres;pwd=2409");
+        if (!optionsBuilder.IsConfigured)
+        { 
+            optionsBuilder.LogTo(Console.WriteLine, Microsoft.Extensions.Logging.LogLevel.Information);
+            optionsBuilder.UseNpgsql("host=localhost;db=imdb;uid=postgres;pwd=2409");
+        }
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -221,6 +234,18 @@ internal class ImdbContext : DbContext
         modelBuilder.Entity<SearchName>().Property(x => x.PrimaryTitle).HasColumnName("primarytitle");
         modelBuilder.Entity<SearchName>().Property(x => x.Nconst).HasColumnName("nconst");
         modelBuilder.Entity<SearchName>().Property(x => x.PrimaryName).HasColumnName("primaryname");
+
+        // Configure one-to-one relationship between TitleBasic and TitleRating
+        modelBuilder.Entity<TitleBasic>()
+            .HasOne(tb => tb.TitleRating)
+            .WithOne(tr => tr.TitleBasic)
+            .HasForeignKey<TitleRating>(tr => tr.Tconst);
+
+        // Configure one-to-many relationship between TitleBasic and MovieGenre
+        modelBuilder.Entity<TitleBasic>()
+            .HasMany(tb => tb.MovieGenres)
+            .WithOne(mg => mg.TitleBasic)
+            .HasForeignKey(mg => mg.Tconst);
 
     }
 }

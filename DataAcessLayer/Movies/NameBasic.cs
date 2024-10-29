@@ -20,5 +20,7 @@ namespace DataAcessLayer.Movies
         [MaxLength(4)]
         public string? DeathYear { get; set; }
 
+        public ICollection<PersonProfession> PersonProfessions { get; set; }
+        public ICollection<PersonKnownTitle> PersonKnownTitles { get; set; }
     }
 }

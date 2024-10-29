@@ -1,41 +1,40 @@
 ﻿using DataAcessLayer.Users;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
-using Npgsql.EntityFrameworkCore.PostgreSQL.Infrastructure.Internal;
 
-namespace DataAcessLayer;
-public class DataService : IDataService
+namespace DataAcessLayer
 {
-    public IList<User> GetUsers()
+    public class DataService : IDataService
     {
-        var db = new ImdbContext();
-        return db.Users.ToList();
-    }
+        private readonly ImdbContext _context;
 
-    public User GetUserById(int id)
-    {
-        var db = new ImdbContext();
-        return db.Users.Find(id);
-    }
+        public DataService(ImdbContext context)
+        {
+            _context = context;
+        }
 
-    public bool LoginUser(string InputUsername, string InputPassword)
-    {
-        var db = new ImdbContext();
-        var result = Call<bool>(db, $"SELECT login_user('{InputUsername}', '{InputPassword}')");
-        return result;
-    }
+        public IList<User> GetUsers()
+        {
+            return _context.Users.ToList();
+        }
 
+        public User GetUserById(int id)
+        {
+            return _context.Users.Find(id);
+        }
 
+        public bool LoginUser(string inputUsername, string inputPassword)
+        {
+            var result = Call<bool>($"SELECT login_user('{inputUsername}', '{inputPassword}')");
+            return result;
+        }
 
-    public T Call<T>(DbContext context, string sql)
-    {
-        var connection = (NpgsqlConnection)context.Database.GetDbConnection();
-        connection.Open();
-        var command = new NpgsqlCommand();
-        command.Connection = connection;
-        command.CommandText = sql;
-        return (T)command.ExecuteScalar(); //command.ExecuteScalar();
+        public T Call<T>(string sql)
+        {
+            using var connection = (NpgsqlConnection)_context.Database.GetDbConnection();
+            connection.Open();
+            using var command = new NpgsqlCommand(sql, connection);
+            return (T)command.ExecuteScalar();
+        }
     }
 }
-
-
