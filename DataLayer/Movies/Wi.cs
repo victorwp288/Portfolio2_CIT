@@ -1,21 +1,21 @@
-﻿using DataLayer;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DataAcessLayer
+namespace DataAcessLayer.Movies
 {
-    public class PersonKnownTitle
+    public class Wi
     {
-        [StringLength(10)]
+        [MaxLength(10)]
         public string Tconst { get; set; }
-        [StringLength(10)]
-        public string Nconst { get; set; }
+        public string Word { get; set; }
+        public char Field { get; set; }
+        public string? Lexeme { get; set; }
         // Navigation Properties 
         public TitleBasic TitleBasic { get; set; }
-        public NameBasic NameBasic { get; set; }
     }
 }

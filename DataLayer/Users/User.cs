@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DataLayer
+namespace DataAcessLayer.Users
 {
     public class User
     {
@@ -13,6 +13,6 @@ namespace DataLayer
         public string Email { get; set; }
         public string PasswordHash { get; set; }
         public DateTime CreatedAt { get; set; }
-        public string Role { get; set; } 
+        public string Role { get; set; }
     }
 }

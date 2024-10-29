@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 "search_co_players"("p_search_name" varchar)
   RETURNS TABLE("nconst" bpchar, "primaryname" varchar, "frequency" int4)*/
 
-namespace DataAccessLayerFunction;
+namespace DataAcessLayer.Functions;
 
 public class SearchCoPlayer
 {

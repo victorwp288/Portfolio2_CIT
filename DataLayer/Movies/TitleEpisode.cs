@@ -1,21 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using DataLayer;
 
-namespace DataAcessLayer
+namespace DataAcessLayer.Movies
 {
-    public class Wi
+    public class TitleEpisode
     {
-        [MaxLength(10)]
+        [Key]
+        [StringLength(10)]
         public string Tconst { get; set; }
-        public string Word { get; set; }
-        public char Field { get; set; }
-        public string? Lexeme { get; set; }
+        [StringLength(10)]
+        public string ParentTconst { get; set; }
+        public int SeasonNumber { get; set; }
+        public int EpisodeNumber { get; set; }
         // Navigation Properties 
         public TitleBasic TitleBasic { get; set; }
     }

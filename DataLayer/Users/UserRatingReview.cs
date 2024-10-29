@@ -5,17 +5,18 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using DataAcessLayer.Movies;
 
-namespace DataLayer
+namespace DataAcessLayer.Users
 {
     public class UserRatingReview
     {
-       
-     
+
+
         public int UserId { get; set; }
-        
+
         [StringLength(10)]
-        public string Tconst { get; set; } 
+        public string Tconst { get; set; }
 
         [Range(1, 10)] // Data annotation for rating range
         public int Rating { get; set; }
@@ -29,6 +30,6 @@ namespace DataLayer
         public User User { get; set; }
         public TitleBasic TitleBasic { get; set; }
 
-        
+
     }
 }

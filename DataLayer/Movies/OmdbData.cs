@@ -5,12 +5,11 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using DataLayer;
 
-namespace DataAcessLayer
+namespace DataAcessLayer.Movies
 {
     public class OmdbData
-    {        
+    {
         [Key]
         [StringLength(10)]
         public string Tconst { get; set; }

@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using static System.Net.Mime.MediaTypeNames;
 
-namespace DataLayer
+namespace DataAcessLayer.Movies
 {
     public class TitleBasic
     {

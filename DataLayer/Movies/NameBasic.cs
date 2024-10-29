@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DataLayer
+namespace DataAcessLayer.Movies
 {
     public class NameBasic
     {
@@ -15,9 +15,9 @@ namespace DataLayer
         [MaxLength(10)]
         public string Nconst { get; set; }
         public string PrimaryName { get; set; }
-        [MaxLength(4)] 
+        [MaxLength(4)]
         public string? BirthYear { get; set; }
-        [MaxLength(4)] 
+        [MaxLength(4)]
         public string? DeathYear { get; set; }
 
     }

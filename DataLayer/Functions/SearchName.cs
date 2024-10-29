@@ -10,7 +10,7 @@ using DataAcessLayer.Movies;
 "search_names"("p_search_text" varchar)
   RETURNS TABLE("tconst" bpchar, "primarytitle" text, "nconst" bpchar, "primaryname" varchar)*/
 
-namespace DataAccessLayerFunction;
+namespace DataAcessLayer.Functions;
 
 public class SearchName
 {

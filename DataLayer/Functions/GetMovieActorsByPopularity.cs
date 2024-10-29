@@ -5,18 +5,16 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+/*GetMovieActorsByPopularity we using for function
+"get_movie_actors_by_popularity"("p_tconst" bpchar)
+  RETURNS TABLE("nconst" bpchar, "primaryname" varchar, "weighted_rating" numeric)*/
+namespace DataAcessLayer.Functions;
 
-/*SearchCoPlayers we using for function
-"search_co_players"("p_search_name" varchar)
-  RETURNS TABLE("nconst" bpchar, "primaryname" varchar, "frequency" int4)*/
-
-namespace DataAccessLayerFunction;
-
-public class SearchCoPlayer
+public class GetMovieActorsByPopularity
 {
     [StringLength(10)]
     public string Nconst { get; set; }
-    public int Frequency { get; set; }
+    public double WeightedRating { get; set; }
     public string PrimaryName { get; set; }
     // Navigation Properties 
     public NameBasic NameBasic { get; set; }

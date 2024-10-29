@@ -5,15 +5,16 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using DataAcessLayer.Movies;
 
-namespace DataLayer
+namespace DataAcessLayer.Users
 {
     public class UserBookmark
     {
         public int UserId { get; set; }
 
         [StringLength(10)]
-        public string Tconst { get; set; } 
+        public string Tconst { get; set; }
 
         public string? Note { get; set; }
 

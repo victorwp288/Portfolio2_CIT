@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DataLayer
+namespace DataAcessLayer.Users
 {
     public class UserSearchHistory
     {
@@ -13,6 +13,6 @@ namespace DataLayer
         public DateTime SearchDate { get; set; }
         // Navigation Properties 
         public User User { get; set; }
-        
+
     }
 }

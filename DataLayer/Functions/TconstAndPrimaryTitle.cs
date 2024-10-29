@@ -20,7 +20,7 @@ TconstAndPrimaryTitle is using for functions
 
 
 
-namespace DataAcessLayerFunction;
+namespace DataAcessLayer.Functions;
 
 public class TconstAndPrimaryTitle
 {

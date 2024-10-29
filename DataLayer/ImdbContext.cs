@@ -1,18 +1,16 @@
-﻿using DataLayer;
-using DataAcessLayer;
-using Microsoft.EntityFrameworkCore;
-using DataAcessLayerFunction;
+﻿using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
-using DataAccessLayerFunction;
 using DataAcessLayer.Users;
+using DataAcessLayer.Movies;
+using DataAcessLayer.Functions;
 
 
-namespace DataService;
+namespace DataAcessLayer;
 internal class ImdbContext : DbContext
 {
     public DbSet<User> Users { get; set; }

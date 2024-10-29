@@ -1,23 +1,20 @@
-﻿using DataLayer;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DataAcessLayer
+namespace DataAcessLayer.Movies
 {
-    public class TitleEpisode
+    public class PersonKnownTitle
     {
-        [Key]
         [StringLength(10)]
         public string Tconst { get; set; }
         [StringLength(10)]
-        public string ParentTconst { get; set; }
-        public int SeasonNumber { get; set; }
-        public int EpisodeNumber { get; set; }
+        public string Nconst { get; set; }
         // Navigation Properties 
         public TitleBasic TitleBasic { get; set; }
+        public NameBasic NameBasic { get; set; }
     }
 }
