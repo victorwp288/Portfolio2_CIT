@@ -13,7 +13,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\BuisnessLayer\BuisnessLayer.csproj" />
-    <ProjectReference Include="..\DataLayer\DataAcessLayer.csproj" />
+    <ProjectReference Include="..\DataAcessLayer\DataAcessLayer.csproj" />
   </ItemGroup>
 
 </Project>
