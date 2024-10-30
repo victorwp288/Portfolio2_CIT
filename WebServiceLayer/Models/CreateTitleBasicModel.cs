@@ -2,11 +2,8 @@
 
 namespace WebServiceLayer.Models
 {
-    public class TitleBasicModel
+    public class CreateTitleBasicModel
     {
-
-        public string? Url { get; set; }
-
         [MaxLength(10)]
         public string? Tconst { get; set; }
 

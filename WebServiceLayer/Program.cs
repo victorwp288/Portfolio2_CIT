@@ -1,4 +1,11 @@
+using DataAcessLayer;
+using Mapster;
+
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddSingleton<IDataService, DataAcessLayer.DataService>();
+
+builder.Services.AddMapster();
 
 // Add services to the container.
 

@@ -1,6 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using DataAcessLayer;
-using WebServiceLayer.Controllers;
+using DataAcessLayer.Movies;
+using WebServiceLayer.Models;
+using Mapster;
+
 
 namespace WebServiceLayer.Controllers
 {
@@ -20,20 +23,33 @@ namespace WebServiceLayer.Controllers
             _linkGenerator = linkGenerator;
         }
 
-       /* [HttpGet(Name = nameof(GetMovies))]
+       [HttpGet(Name = nameof(GetMovies))]
         public IActionResult GetMovies(int page = 0, int pageSize = 2)
         {
             var categories = _dataService
-                .GetTitleBasic(page, pageSize)
-                .Select(CreateCategoryModel);
-            var numberOfItems = _dataService.NumberOfCategories();
+                .GetTitleBasics(page, pageSize)
+                .Select(CreateTitleBasicModel);
+            var numberOfItems = _dataService.GetNumberOfTitleBasics();
             object result = CreatePaging(
-                nameof(GetCategories),
+                nameof(GetMovies),
                 page,
                 pageSize,
                 numberOfItems,
                 categories);
             return Ok(result);
-        }*/
+        }
+
+        private TitleBasicModel? CreateTitleBasicModel(TitleBasic? title)
+        {
+            if (title == null)
+            {
+                return null;
+            }
+
+            var model = title.Adapt<TitleBasicModel>();
+            model.Url = GetUrl(nameof(GetMovies), new { title.Tconst });
+
+            return model;
+        }
     }
 }
