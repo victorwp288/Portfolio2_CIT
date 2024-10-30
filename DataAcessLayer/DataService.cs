@@ -1,4 +1,5 @@
-﻿using DataAcessLayer.Users;
+﻿using DataAcessLayer.Movies;
+using DataAcessLayer.Users;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
 
@@ -36,5 +37,15 @@ namespace DataAcessLayer
             using var command = new NpgsqlCommand(sql, connection);
             return (T)command.ExecuteScalar();
         }
+
+        public List<TitleBasic> GetTitleBasics(int page, int pagesize)
+        {
+           
+            return _context.TitleBasics
+                .Skip(page * pagesize)
+                .Take(pagesize)
+                .ToList();
+        }
     }
+
 }
