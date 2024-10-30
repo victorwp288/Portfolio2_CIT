@@ -38,9 +38,21 @@ namespace DataAcessLayer
             return (T)command.ExecuteScalar();
         }
 
+<<<<<<< HEAD
         public IList<TitleBasic> GetTitleBasic() {
             return _context.TitleBasics.ToList();
         }
 
+=======
+        public List<TitleBasic> GetTitleBasics(int page, int pagesize)
+        {
+           
+            return _context.TitleBasics
+                .Skip(page * pagesize)
+                .Take(pagesize)
+                .ToList();
+        }
+>>>>>>> cd3c5fcd43586195ba3da8f2564e57b80eae15fd
     }
+
 }
