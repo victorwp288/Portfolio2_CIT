@@ -1,9 +1,13 @@
 using DataAcessLayer;
 using Mapster;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddSingleton<IDataService, DataAcessLayer.DataService>();
+builder.Services.AddDbContext<ImdbContext>(options =>
+    options.UseNpgsql("host=localhost;db=imdb;uid=postgres;pwd=Ferieland128"));
+
+builder.Services.AddScoped<IDataService, DataService>();
 
 builder.Services.AddMapster();
 

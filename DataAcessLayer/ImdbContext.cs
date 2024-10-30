@@ -89,7 +89,7 @@ public class ImdbContext : DbContext
         modelBuilder.Entity<NameRating>().Property(x => x.WeightedRating).HasColumnName("weighted_rating");
         
 
-        modelBuilder.Entity<TitleBasic>().ToTable("titleb_basics");
+        modelBuilder.Entity<TitleBasic>().ToTable("title_basics");
         modelBuilder.Entity<TitleBasic>().Property(x => x.Tconst).HasColumnName("tconst");
         modelBuilder.Entity<TitleBasic>().Property(x => x.TitleType).HasColumnName("titletype");
         modelBuilder.Entity<TitleBasic>().Property(x => x.PrimaryTitle).HasColumnName("primarytitle");

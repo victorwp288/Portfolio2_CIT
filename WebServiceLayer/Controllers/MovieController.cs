@@ -24,7 +24,7 @@ namespace WebServiceLayer.Controllers
         }
 
        [HttpGet(Name = nameof(GetMovies))]
-        public IActionResult GetMovies(int page = 0, int pageSize = 2)
+        public IActionResult GetMovies(int page = 0, int pageSize = 5)
         {
             var categories = _dataService
                 .GetTitleBasics(page, pageSize)
