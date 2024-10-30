@@ -7,9 +7,10 @@ namespace DataAcessLayer
     {
         static void Main(string[] args)
         {
+            var context = new ImdbContext();
             // Your program logic goes here 
             Console.WriteLine("Hello, world!");
-            var ds = new DataService();
+            var ds = new DataService(context);
             /*var item = ds.GetUserById(1);
             if (item == null)
             {

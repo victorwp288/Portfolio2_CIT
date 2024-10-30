@@ -10,6 +10,7 @@ namespace Portfolio2_Tests;
 
 public class DataServiceTests
 {
+    
     /* Users */
     [Fact]
     public void User_Object_HasIdUsernameEmailPassDateRolt()
@@ -24,7 +25,8 @@ public class DataServiceTests
     [Fact]
     public void User_GetUsers()
     {
-        var service = new DataService();
+        var context = new ImdbContext();
+        var service = new DataService(context);
         var items = service.GetUsers();
         Assert.Equal(2, items.Count);
         Assert.Equal("testuser1", items.First().Username);
@@ -35,7 +37,8 @@ public class DataServiceTests
     [Fact]
     public void User_GetUserById()
     {
-        var service = new DataService();
+        var context = new ImdbContext();
+        var service = new DataService(context);
         var item = service.GetUserById(1);
         Assert.Equal("testuser1", item.Username);
         Assert.Equal("testuser1@example.com", item.Email);
