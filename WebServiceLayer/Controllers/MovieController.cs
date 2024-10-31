@@ -23,7 +23,21 @@ namespace WebServiceLayer.Controllers
             _linkGenerator = linkGenerator;
         }
 
-       [HttpGet(Name = nameof(GetMovies))]
+        [HttpGet("{id}", Name = nameof(GetTitleBasic))]
+        public IActionResult GetTitleBasic(string id)
+        {
+            var category = _dataService.GetTitleBasic(id);
+
+            if (category == null)
+            {
+                return NotFound();
+            }
+            var model = CreateTitleBasicModel(category);
+
+            return Ok(model);
+        }
+
+        [HttpGet(Name = nameof(GetMovies))]
         public IActionResult GetMovies(int page = 0, int pageSize = 5)
         {
             var categories = _dataService

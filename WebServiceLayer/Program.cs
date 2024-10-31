@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<ImdbContext>(options =>
-    options.UseNpgsql("host=localhost;db=imdb;uid=postgres;pwd=Ferieland128"));
+    options.UseNpgsql("host=localhost;db=imdb;uid=postgres;pwd=Poncho24"));
 
 builder.Services.AddScoped<IDataService, DataService>();
 
