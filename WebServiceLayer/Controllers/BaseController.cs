@@ -23,7 +23,9 @@ public class BaseController : ControllerBase
     {
         return _linkGenerator.GetUriByName(
             HttpContext,
-            linkName, args);
+            linkName,
+            args);
+            
     }
 
 
