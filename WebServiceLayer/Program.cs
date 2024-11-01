@@ -1,4 +1,18 @@
+using DataAcessLayer;
+using Mapster;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
+
+// Configure Entity Framework Core to use PostgreSQL as the database provider
+builder.Services.AddDbContext<ImdbContext>(options =>
+    options.UseNpgsql("host=localhost;db=imdb;uid=postgres;pwd=Ferieland128"));
+
+// Register IDataService with its implementation, DataService, using scoped lifetime
+builder.Services.AddScoped<IDataService, DataService>();
+
+// Register Mapster to handle object mapping automatically between data models and DTOs
+builder.Services.AddMapster();
 
 // Add services to the container.
 

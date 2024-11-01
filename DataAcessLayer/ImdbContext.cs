@@ -53,7 +53,7 @@ public class ImdbContext : DbContext
         if (!optionsBuilder.IsConfigured)
         { 
             optionsBuilder.LogTo(Console.WriteLine, Microsoft.Extensions.Logging.LogLevel.Information);
-            optionsBuilder.UseNpgsql("host=localhost;db=imdb;uid=postgres;pwd=Poncho24");
+            optionsBuilder.UseNpgsql("host=localhost;db=imdb;uid=postgres;pwd=Ferieland128");
         }
     }
 
@@ -89,7 +89,7 @@ public class ImdbContext : DbContext
         modelBuilder.Entity<NameRating>().Property(x => x.WeightedRating).HasColumnName("weighted_rating");
         
 
-        modelBuilder.Entity<TitleBasic>().ToTable("titleb_basics");
+        modelBuilder.Entity<TitleBasic>().ToTable("title_basics");
         modelBuilder.Entity<TitleBasic>().Property(x => x.Tconst).HasColumnName("tconst");
         modelBuilder.Entity<TitleBasic>().Property(x => x.TitleType).HasColumnName("titletype");
         modelBuilder.Entity<TitleBasic>().Property(x => x.PrimaryTitle).HasColumnName("primarytitle");

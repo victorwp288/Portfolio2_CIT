@@ -1,6 +1,14 @@
-@WebServiceLayer_HostAddress = http://localhost:5078
+@WebServiceLayer_HostAddress = http://localhost:5001
 
 GET {{WebServiceLayer_HostAddress}}/weatherforecast/
 Accept: application/json
 
 ###
+
+POST {{WebServiceLayer_HostAddress}}/api/movies
+Content-Type: application/json
+{
+    "Tconst": "test",
+    "TitleType": "test",
+    "PrimaryTitle": "test"
+}
