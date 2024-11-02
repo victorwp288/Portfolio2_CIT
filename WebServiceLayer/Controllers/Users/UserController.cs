@@ -1,11 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using DataAcessLayer;
-using DataAcessLayer.Movies;
-using WebServiceLayer.Models;
 using Mapster;
 using BusinessLayer.Interfaces;
 using BusinessLayer.DTOs;
-using BusinessLayer.Services;
+using WebServiceLayer.Models.Users;
 
 namespace WebServiceLayer.Controllers.Users;
 
@@ -27,7 +24,30 @@ namespace WebServiceLayer.Controllers.Users;
             _linkGenerator = linkGenerator;
         }
 
+        [HttpGet("{userId}", Name = nameof(GetUserByIdAsync))]
+        public async Task<IActionResult> GetUserByIdAsync(int userId)
+        {
+            var category = await _userService.GetUserByIdAsync(userId);
+
+            if (category == null)
+            {
+                return NotFound();
+            }
+            var model = CreateUser(category);
+
+            return Ok(model);
+        }
+
+        private User CreateUser(UserDTO user)
+        {
+            // Map TitleBasic entity properties to MovieModel properties
+            var model = user.Adapt<User>();
+
+            // Generate URL for accessing details of the current movie and add to the model
+            model.Url = GetUrl(nameof(GetUserByIdAsync), new { user.UserId });
+
+            return model;
+        }
 
 
-    
     }
