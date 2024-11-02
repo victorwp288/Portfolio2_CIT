@@ -1,4 +1,6 @@
 using DataAcessLayer;
+using BusinessLayer.Interfaces;
+using BusinessLayer.Services;
 using Mapster;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,6 +12,10 @@ builder.Services.AddDbContext<ImdbContext>(options =>
 
 // Register IDataService with its implementation, DataService, using scoped lifetime
 builder.Services.AddScoped<IDataService, DataService>();
+
+builder.Services.AddScoped<ITitleService, TitleService>();
+
+builder.Services.AddScoped<IUserService, UserService>();
 
 // Register Mapster to handle object mapping automatically between data models and DTOs
 builder.Services.AddMapster();

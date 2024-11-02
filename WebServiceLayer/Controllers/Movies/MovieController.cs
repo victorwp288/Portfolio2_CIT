@@ -1,11 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using DataAcessLayer;
 using DataAcessLayer.Movies;
-using WebServiceLayer.Models;
 using Mapster;
+using BusinessLayer.Interfaces;
+using BusinessLayer.DTOs;
+using WebServiceLayer.Models.Movies;
 
 
-namespace WebServiceLayer.Controllers
+namespace WebServiceLayer.Controllers.Movies
 {
     // Attribute indicating this class is an API controller, and setting the base route to "api/movies"
     [ApiController]
@@ -14,29 +16,32 @@ namespace WebServiceLayer.Controllers
     {
         // accessing data from the data service layer, and generating links within the controller
         IDataService _dataService;
+        ITitleService _titleService;
         private readonly LinkGenerator _linkGenerator;
 
         // Constructor that injects IDataService and LinkGenerator via dependency injection
         public MovieController(
         IDataService dataService,
+        ITitleService titleService,
         LinkGenerator linkGenerator)
         : base(linkGenerator)
         {
             _dataService = dataService;
+            _titleService = titleService;
             _linkGenerator = linkGenerator;
         }
 
         // GET method to retrieve a specific movie by its unique identifier
-        [HttpGet("{id}", Name = nameof(GetTitleBasic))]
-        public IActionResult GetTitleBasic(string id)
+        [HttpGet("{id}", Name = nameof(GetTitleByIdAsync))]
+        public async Task<IActionResult> GetTitleByIdAsync(string id)
         {
-            var category = _dataService.GetTitleBasic(id);
+            var category = await _titleService.GetTitleByIdAsync(id);
 
             if (category == null)
             {
                 return NotFound();
             }
-            var model = CreateTitleBasicModel(category);
+            var model = CreateMovie(category);
 
             return Ok(model);
         }
@@ -78,5 +83,19 @@ namespace WebServiceLayer.Controllers
 
             return model;
         }
+
+        // Helper method to create a MovieModel from a TitleBasic entity
+        private Movie CreateMovie(TitleDTO title)
+        {
+            // Map TitleBasic entity properties to MovieModel properties
+            var model = title.Adapt<Movie>();
+
+            // Generate URL for accessing details of the current movie and add to the model
+            model.Url = GetUrl(nameof(GetTitleByIdAsync), new { title.TConst });
+
+            return model;
+        }
+
+
     }
 }

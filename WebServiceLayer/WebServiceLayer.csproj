@@ -18,4 +18,8 @@
     <ProjectReference Include="..\DataAcessLayer\DataAcessLayer.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Models\Users\" />
+  </ItemGroup>
+
 </Project>
