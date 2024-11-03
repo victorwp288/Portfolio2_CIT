@@ -1,14 +1,29 @@
 ﻿using DataAcessLayer.Repositories.Interfaces;
 using Npgsql;
-
+using Microsoft.EntityFrameworkCore;
+using DataAcessLayer.Context;
+using DataAcessLayer.Entities.Users;
 namespace DataAcessLayer.Repositories.Implementations
 {
     public class UserRepository : BaseRepository, IUserRepository
     {
-        public UserRepository(string connectionString) : base(connectionString) { }
+        public UserRepository(string connectionString) : base(connectionString)
+        {
+        }
+
+        public UserRepository(ImdbContext context) : base(context)
+        {
+        }
 
         public async Task<bool> LoginUserAsync(string username, string password)
         {
+            if (_context != null)
+            {
+                var user = await _context.Users
+                    .FirstOrDefaultAsync(u => u.Username == username && u.PasswordHash == password);
+                return user != null;
+            }
+
             const string sql = "SELECT login_user(@username, @password)";
             var parameters = new[]
             {
@@ -21,15 +36,31 @@ namespace DataAcessLayer.Repositories.Implementations
 
         public async Task RegisterUserAsync(string username, string email, string password)
         {
-            const string sql = "SELECT register_user(@username, @email, @password)";
-            var parameters = new[]
+            if (_context != null)
             {
-                new NpgsqlParameter("@username", username),
-                new NpgsqlParameter("@email", email),
-                new NpgsqlParameter("@password", password)
-            };
+                var user = new User
+                {
+                    Username = username,
+                    Email = email,
+                    PasswordHash = password,
+                    CreatedAt = DateTime.UtcNow,
+                    Role = "User"
+                };
+                await _context.Users.AddAsync(user);
+                await _context.SaveChangesAsync();
+            }
+            else
+            {
+                const string sql = "SELECT register_user(@username, @email, @password)";
+                var parameters = new[]
+                {
+                    new NpgsqlParameter("@username", username),
+                    new NpgsqlParameter("@email", email),
+                    new NpgsqlParameter("@password", password)
+                };
 
-            await ExecuteScalarAsync<object>(sql, parameters);
+                await ExecuteScalarAsync<object>(sql, parameters);
+            }
         }
 
         public async Task UpdateUserRoleAsync(int userId, string newRole)

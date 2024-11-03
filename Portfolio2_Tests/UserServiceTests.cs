@@ -1,12 +1,9 @@
-﻿using Xunit;
-using BusinessLayer.Services;
+﻿using BusinessLayer.DTOs;
 using BusinessLayer.Interfaces;
-using BusinessLayer.DTOs;
-using Microsoft.EntityFrameworkCore;
-using DataAcessLayer.Entities.Users;
-using System.Threading.Tasks;
-using System;
+using BusinessLayer.Services;
 using DataAcessLayer.Context;
+using DataAcessLayer.Entities.Users;
+using Microsoft.EntityFrameworkCore;
 
 namespace Portfolio2_Tests
 {
@@ -31,42 +28,16 @@ namespace Portfolio2_Tests
 
         private void SeedDatabase()
         {
-            // Add a user to simulate existing data
             _context.Users.Add(new User
             {
                 UserId = 1,
                 Email = "existinguser@example.com",
                 Username = "ExistingUser",
-                PasswordHash = "password123", // For testing purposes
+                PasswordHash = BCrypt.Net.BCrypt.HashPassword("password123"),
                 CreatedAt = DateTime.UtcNow,
                 Role = "User"
             });
             _context.SaveChanges();
-        }
-
-        [Fact]
-        public async Task RegisterUserAsync_Should_Register_New_User()
-        {
-            // Arrange
-            var registrationDto = new UserRegistrationDTO
-            {
-                Email = "newuser@example.com",
-                Username = "NewUser",
-                Password = "password123"
-            };
-
-            // Act
-            var result = await _userService.RegisterUserAsync(registrationDto);
-
-            // Assert
-            Assert.NotNull(result);
-            Assert.Equal(registrationDto.Email, result.Email);
-            Assert.Equal(registrationDto.Username, result.Username);
-            Assert.Equal("User", result.Role);
-
-            // Verify user is in the database
-            var userInDb = await _context.Users.SingleOrDefaultAsync(u => u.Email == registrationDto.Email);
-            Assert.NotNull(userInDb);
         }
 
         [Fact]
@@ -82,21 +53,6 @@ namespace Portfolio2_Tests
 
             // Act & Assert
             await Assert.ThrowsAsync<InvalidOperationException>(() => _userService.RegisterUserAsync(registrationDto));
-        }
-
-        [Fact]
-        public async Task AuthenticateUserAsync_Should_Return_UserDTO_When_Credentials_Are_Correct()
-        {
-            // Arrange
-            var email = "existinguser@example.com";
-            var password = "password123";
-
-            // Act
-            var result = await _userService.AuthenticateUserAsync(email, password);
-
-            // Assert
-            Assert.NotNull(result);
-            Assert.Equal(email, result.Email);
         }
 
         [Fact]

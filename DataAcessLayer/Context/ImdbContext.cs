@@ -8,19 +8,21 @@ using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 using DataAcessLayer.Entities.Functions;
 using DataAcessLayer.Entities.Movies;
 using DataAcessLayer.Entities.Users;
-
+using Microsoft.Extensions.Configuration;
 
 namespace DataAcessLayer.Context;
 public class ImdbContext : DbContext
 {
+    private readonly IConfiguration _configuration;
 
     public ImdbContext()
     {
     }
 
-    public ImdbContext(DbContextOptions<ImdbContext> options)
+    public ImdbContext(DbContextOptions<ImdbContext> options, IConfiguration configuration)
     : base(options)
     {
+        _configuration = configuration;
     }
 
     public DbSet<User> Users { get; set; }
@@ -53,7 +55,6 @@ public class ImdbContext : DbContext
         if (!optionsBuilder.IsConfigured)
         {
             optionsBuilder.LogTo(Console.WriteLine, Microsoft.Extensions.Logging.LogLevel.Information);
-            optionsBuilder.UseNpgsql("host=localhost;db=imdb;uid=postgres;pwd=Hejmed12!");
         }
     }
 
