@@ -17,6 +17,8 @@ builder.Services.AddScoped<ITitleService, TitleService>();
 
 builder.Services.AddScoped<IUserService, UserService>();
 
+builder.Services.AddScoped<IRatingService, RatingService>();
+
 // Register Mapster to handle object mapping automatically between data models and DTOs
 builder.Services.AddMapster();
 

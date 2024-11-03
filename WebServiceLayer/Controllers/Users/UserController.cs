@@ -3,6 +3,8 @@ using Mapster;
 using BusinessLayer.Interfaces;
 using BusinessLayer.DTOs;
 using WebServiceLayer.Models.Users;
+using WebServiceLayer.Models.Movies;
+using DataAcessLayer;   
 
 namespace WebServiceLayer.Controllers.Users;
 
@@ -38,7 +40,8 @@ namespace WebServiceLayer.Controllers.Users;
             return Ok(model);
         }
 
-        private User CreateUser(UserDTO user)
+
+    private User CreateUser(UserDTO user)
         {
             // Map TitleBasic entity properties to MovieModel properties
             var model = user.Adapt<User>();
