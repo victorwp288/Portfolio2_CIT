@@ -4,9 +4,10 @@
     using System.Threading.Tasks;
     using BusinessLayer.DTOs;
     using BusinessLayer.Interfaces;
-    using DataAcessLayer;
-    using DataAcessLayer.Users;
+    using DataAcessLayer.Context;
+	using DataAcessLayer.Entities.Users; 
     using Microsoft.EntityFrameworkCore;
+    using Npgsql;
 
 
 
@@ -129,14 +130,21 @@
         // Helper methods for password hashing
         private string HashPassword(string password)
         {
-            // Implement a secure password hashing mechanism (e.g., BCrypt)
-            return password; // Placeholder
+            using var connection = (NpgsqlConnection)_context.Database.GetDbConnection();
+            connection.Open();
+            using var command = new NpgsqlCommand("SELECT crypt(@password, gen_salt('bf'))", connection);
+            command.Parameters.AddWithValue("password", password);
+            return (string)command.ExecuteScalar();
         }
 
         private bool VerifyPassword(string password, string passwordHash)
         {
-            // Implement password verification
-            return password == passwordHash; // Placeholder
+            using var connection = (NpgsqlConnection)_context.Database.GetDbConnection();
+            connection.Open();
+            using var command = new NpgsqlCommand("SELECT crypt(@password, @hash) = @hash", connection);
+            command.Parameters.AddWithValue("password", password);
+            command.Parameters.AddWithValue("hash", passwordHash);
+            return (bool)command.ExecuteScalar();
         }
     }
 }

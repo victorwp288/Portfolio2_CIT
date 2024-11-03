@@ -3,10 +3,10 @@ using BusinessLayer.Services;
 using BusinessLayer.Interfaces;
 using BusinessLayer.DTOs;
 using Microsoft.EntityFrameworkCore;
-using DataAcessLayer;
-using DataAcessLayer.Users;
+using DataAcessLayer.Entities.Users;
 using System.Threading.Tasks;
 using System;
+using DataAcessLayer.Context;
 
 namespace Portfolio2_Tests
 {

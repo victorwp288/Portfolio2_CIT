@@ -1,5 +1,16 @@
 ﻿using DataAcessLayer;
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using DataAcessLayer.Entities.Functions;
+using DataAcessLayer.Repositories.Interfaces;
+using Npgsql;
+using DataAcessLayer.Context;
+using Microsoft.EntityFrameworkCore;
+using DataAcessLayer.Entities.Users;
+using DataAcessLayer.Repositories.Implementations;
 
 namespace DataAcessLayer
 {

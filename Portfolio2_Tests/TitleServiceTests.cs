@@ -1,13 +1,8 @@
-﻿using Xunit;
+﻿using BusinessLayer.Interfaces;
 using BusinessLayer.Services;
-using BusinessLayer.Interfaces;
-using BusinessLayer.DTOs;
+using DataAcessLayer.Context;
+using DataAcessLayer.Entities.Movies;
 using Microsoft.EntityFrameworkCore;
-using DataAcessLayer;
-using DataAcessLayer.Movies;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using System;
 
 namespace Portfolio2_Tests
 {
@@ -110,27 +105,30 @@ namespace Portfolio2_Tests
         {
             // Arrange
             var query = "Test Movie";
+            var page = 1;
+            var pageSize = 10;
 
             // Act
-            var results = await _titleService.SearchTitlesAsync(query);
+            var results = await _titleService.SearchTitlesAsync(query, page, pageSize);
 
             // Assert
             Assert.NotNull(results);
-            Assert.Equal(2, results.Count());
+            Assert.Equal(2, results.Items.Count());
         }
 
         [Fact]
         public async Task GetTopRatedTitlesAsync_Should_Return_Top_Rated_Titles()
         {
             // Arrange
-            var count = 1;
+            var page = 1;
+            var pageSize = 1;
 
             // Act
-            var results = await _titleService.GetTopRatedTitlesAsync(count);
+            var results = await _titleService.GetTopRatedTitlesAsync(page, pageSize);
 
             // Assert
             Assert.NotNull(results);
-            var topTitle = results.First();
+            var topTitle = results.Items.First();
             Assert.Equal("tt0000002", topTitle.TConst);
             Assert.Equal(9.0m, topTitle.AverageRating);
         }

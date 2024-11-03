@@ -3,14 +3,16 @@ using System.Linq;
 using System.Threading.Tasks;
 using BusinessLayer.DTOs;
 using BusinessLayer.Interfaces;
-using DataAcessLayer;
-using DataAcessLayer.Users; // Ensure correct namespace
-using DataAcessLayer.Movies; // For TitleRating
+using DataAcessLayer.Entities;
 using Microsoft.EntityFrameworkCore;
+using DataAcessLayer.Context;
+using System.Collections.Generic;
+using DataAcessLayer.Entities.Users;
+using DataAcessLayer.Entities.Movies;
 
 namespace BusinessLayer.Services
 {
-        public class RatingService : IRatingService
+    public class RatingService : IRatingService
         {
             private readonly ImdbContext _context;
 

@@ -5,7 +5,7 @@
     using System.Threading.Tasks;
     using BusinessLayer.DTOs;
     using BusinessLayer.Interfaces;
-    using DataAcessLayer;
+    using DataAcessLayer.Context;
     using Microsoft.EntityFrameworkCore;
 
     public class SearchService : ISearchService

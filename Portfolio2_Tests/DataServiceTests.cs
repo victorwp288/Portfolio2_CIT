@@ -4,7 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Xunit;
-using DataAcessLayer.Users;
+using DataAcessLayer.Context;
+using DataAcessLayer.Entities.Users;
+using DataAcessLayer.Repositories.Implementations;
 
 namespace Portfolio2_Tests;
 
