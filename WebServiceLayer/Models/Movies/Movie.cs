@@ -3,7 +3,6 @@
     public class Movie
     {
         public string? Url { get; set; }
-
         public string TConst { get; set; }
         public string PrimaryTitle { get; set; }
         public string OriginalTitle { get; set; }
