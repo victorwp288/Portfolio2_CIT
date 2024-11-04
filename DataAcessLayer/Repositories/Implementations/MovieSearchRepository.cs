@@ -84,7 +84,5 @@ namespace DataAcessLayer.Repositories.Implementations
                 PrimaryTitle = reader.GetString(1)
             }, parameters);
         }
-
-        // Implement other methods similarly
     }
 }
