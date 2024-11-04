@@ -1,9 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using DataAcessLayer;
-using DataAcessLayer.Movies;
-using Mapster;
+﻿using BusinessLayer.DTOs;
 using BusinessLayer.Interfaces;
-using BusinessLayer.DTOs;
+using Mapster;
+using Microsoft.AspNetCore.Mvc;
 using WebServiceLayer.Models.Movies;
 
 
