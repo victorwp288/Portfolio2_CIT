@@ -1,8 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using DataAcessLayer;
-using WebServiceLayer.Models;
-using Mapster;
+﻿using DataAcessLayer;
 using DataAcessLayer.Entities.Movies;
+using Mapster;
+using Microsoft.AspNetCore.Mvc;
+using WebServiceLayer.Models;
 
 
 namespace WebServiceLayer.Controllers
