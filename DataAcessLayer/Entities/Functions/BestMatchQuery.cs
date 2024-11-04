@@ -17,5 +17,5 @@ public class BestMatchQuery
     public string PrimaryTitle { get; set; }
     public int Rank { get; set; }
     // Navigation Properties 
-    public TitleBasic TitleBasic { get; set; }
+    //public TitleBasic TitleBasic { get; set; }
 }

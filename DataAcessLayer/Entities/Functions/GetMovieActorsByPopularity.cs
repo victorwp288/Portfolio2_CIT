@@ -17,5 +17,5 @@ public class GetMovieActorsByPopularity
     public double WeightedRating { get; set; }
     public string PrimaryName { get; set; }
     // Navigation Properties 
-    public NameBasic NameBasic { get; set; }
+    //public NameBasic NameBasic { get; set; }
 }

@@ -21,6 +21,6 @@ public class SearchName
     public string PrimaryTitle { get; set; }
     public string PrimaryName { get; set; }
     // Navigation Properties 
-    public TitleBasic TitleBasic { get; set; }
-    public NameBasic NameBasic { get; set; }
+    //public TitleBasic TitleBasic { get; set; }
+    //public NameBasic NameBasic { get; set; }
 }

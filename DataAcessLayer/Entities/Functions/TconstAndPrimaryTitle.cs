@@ -29,7 +29,7 @@ public class TconstAndPrimaryTitle
     public string PrimaryTitle { get; set; }
 
     // Navigation Properties
-    public TitleBasic TitleBasic { get; set; }
+    //public TitleBasic TitleBasic { get; set; }
 
 
 }

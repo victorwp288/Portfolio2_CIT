@@ -22,5 +22,7 @@ namespace DataAcessLayer.Entities.Movies
 
         public ICollection<PersonProfession> PersonProfessions { get; set; }
         public ICollection<PersonKnownTitle> PersonKnownTitles { get; set; }
+        public ICollection<TitlePrincipal> TitlePrincipals { get; set; }
+        public NameRating NameRatings { get; set; }
     }
 }
