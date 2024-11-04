@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace WebServiceLayer.Models
+namespace WebServiceLayer.Models.Movies
 {
     public class CreateTitleBasicModel
     {
