@@ -42,8 +42,6 @@ public class UserController : BaseController
 
     private User CreateUser([FromBody] UserDTO user)
     {
-
-
         // Map TitleBasic entity properties to MovieModel properties
         var model = user.Adapt<User>();
 
@@ -64,7 +62,25 @@ public class UserController : BaseController
         return Ok(model);
     }
 
+    //update user
+    [HttpPut("{userId}")]
+    public async Task<IActionResult> UpdateUser(int userId, UserUpdateDTO model)
+    {
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
 
+        model.UserId = userId;
+        await _userService.UpdateUserAsync(model);
+        return Ok();
+    }
+
+    //delete user
+    [HttpDelete("{userId}")]
+    public async Task<IActionResult> DeleteUser(int userId)
+    {
+        await _userService.DeleteUserAsync(userId);
+        return Ok();
+    }
 
 
 }
