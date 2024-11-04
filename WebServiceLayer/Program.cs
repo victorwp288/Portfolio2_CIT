@@ -1,17 +1,25 @@
 using DataAcessLayer;
-using DataAcessLayer.Context;
-using DataAcessLayer.Repositories.Implementations;
+using BusinessLayer.Interfaces;
+using BusinessLayer.Services;
 using Mapster;
 using Microsoft.EntityFrameworkCore;
+using DataAcessLayer.Context;
+using DataAcessLayer.Repositories.Implementations;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Configure Entity Framework Core to use PostgreSQL as the database provider
 builder.Services.AddDbContext<ImdbContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("ImdbDatabase")));
+    options.UseNpgsql("host=localhost;db=imdb;uid=postgres;pwd=Ferieland128"));
 
 // Register IDataService with its implementation, DataService, using scoped lifetime
 builder.Services.AddScoped<IDataService, DataService>();
+
+builder.Services.AddScoped<ITitleService, TitleService>();
+
+builder.Services.AddScoped<IUserService, UserService>();
+
+builder.Services.AddScoped<IRatingService, RatingService>();
 
 // Register Mapster to handle object mapping automatically between data models and DTOs
 builder.Services.AddMapster();
