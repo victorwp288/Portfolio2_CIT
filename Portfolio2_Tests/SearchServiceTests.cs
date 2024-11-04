@@ -3,12 +3,12 @@ using BusinessLayer.Services;
 using BusinessLayer.Interfaces;
 using BusinessLayer.DTOs;
 using Microsoft.EntityFrameworkCore;
-using DataAcessLayer;
-using DataAcessLayer.Movies;
+using DataAcessLayer.Entities.Movies;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System;
 using System.Linq;
+using DataAcessLayer.Context;
 
 namespace Portfolio2_Tests
 {

@@ -3,8 +3,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using BusinessLayer.DTOs;
 using BusinessLayer.Interfaces;
-using DataAcessLayer;
-using DataAcessLayer.Movies;
+using DataAcessLayer.Context;
+using DataAcessLayer.Entities.Movies;
 using Microsoft.EntityFrameworkCore;
 
 namespace BusinessLayer.Services

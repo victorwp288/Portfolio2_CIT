@@ -1,7 +1,8 @@
-﻿using BusinessLayer.DTOs;
+﻿using BuisnessLayer.DTOs;
+using BusinessLayer.DTOs;
 using BusinessLayer.Interfaces;
-using DataAcessLayer;
-using DataAcessLayer.Movies;
+using DataAcessLayer.Context;
+using DataAcessLayer.Entities.Movies;
 using Microsoft.EntityFrameworkCore;
 
 namespace BusinessLayer.Services
@@ -41,6 +42,29 @@ namespace BusinessLayer.Services
             return titleDtos;
         }
 
+        public async Task<PagedResultDTO<TitleDTO>> SearchTitlesAsync(string query, int page, int pageSize)
+        {
+            var titles = await _context.TitleBasics
+                .Include(t => t.TitleRating)
+                .Include(t => t.MovieGenres)
+                .Where(t => t.PrimaryTitle.Contains(query) || t.OriginalTitle.Contains(query))
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            var titleDtos = titles.Select(MapTitleToDTO).ToList();
+            var totalCount = await _context.TitleBasics
+                .CountAsync(t => t.PrimaryTitle.Contains(query) || t.OriginalTitle.Contains(query));
+
+            return new PagedResultDTO<TitleDTO>
+            {
+                Items = titleDtos,
+                TotalCount = totalCount,
+                Page = page,
+                PageSize = pageSize
+            };
+        }
+
         public async Task<IEnumerable<TitleDTO>> GetTopRatedTitlesAsync(int count)
         {
             var titles = await _context.TitleBasics
@@ -53,6 +77,29 @@ namespace BusinessLayer.Services
 
             var titleDtos = titles.Select(MapTitleToDTO).ToList();
             return titleDtos;
+        }
+
+        public async Task<PagedResultDTO<TitleDTO>> GetTopRatedTitlesAsync(int page, int pageSize)
+        {
+            var titles = await _context.TitleBasics
+                                       .Include(t => t.TitleRating)
+                                       .Include(t => t.MovieGenres)
+                                       .Where(t => t.TitleRating != null)
+                                       .OrderByDescending(t => t.TitleRating.AverageRating)
+                                       .Skip((page - 1) * pageSize)
+                                       .Take(pageSize)
+                                       .ToListAsync();
+
+            var titleDtos = titles.Select(MapTitleToDTO).ToList();
+            var totalCount = await _context.TitleBasics.CountAsync(t => t.TitleRating != null);
+
+            return new PagedResultDTO<TitleDTO>
+            {
+                Items = titleDtos,
+                TotalCount = totalCount,
+                Page = page,
+                PageSize = pageSize
+            };
         }
 
         // Helper method to map TitleBasic to TitleDTO

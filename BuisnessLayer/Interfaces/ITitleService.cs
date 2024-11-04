@@ -1,13 +1,14 @@
 ﻿namespace BusinessLayer.Interfaces
 {
-    using System.Collections.Generic;
-    using System.Threading.Tasks;
+    using BuisnessLayer.DTOs;
     using BusinessLayer.DTOs;
+    using System.Threading.Tasks;
 
     public interface ITitleService
     {
         Task<TitleDTO> GetTitleByIdAsync(string tconst);
-        Task<IEnumerable<TitleDTO>> SearchTitlesAsync(string query);
-        Task<IEnumerable<TitleDTO>> GetTopRatedTitlesAsync(int count);
+        Task<PagedResultDTO<TitleDTO>> SearchTitlesAsync(string query, int page, int pageSize);
+        Task<PagedResultDTO<TitleDTO>> GetTopRatedTitlesAsync(int page, int pageSize);
+
     }
 }

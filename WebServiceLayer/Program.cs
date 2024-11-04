@@ -3,6 +3,8 @@ using BusinessLayer.Interfaces;
 using BusinessLayer.Services;
 using Mapster;
 using Microsoft.EntityFrameworkCore;
+using DataAcessLayer.Context;
+using DataAcessLayer.Repositories.Implementations;
 
 var builder = WebApplication.CreateBuilder(args);
 
