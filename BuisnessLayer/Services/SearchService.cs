@@ -3,6 +3,7 @@
     using BusinessLayer.DTOs;
     using BusinessLayer.Interfaces;
     using DataAcessLayer.Context;
+    using DataAcessLayer.Repositories.Interfaces;
     using Microsoft.EntityFrameworkCore;
     using System.Collections.Generic;
     using System.Linq;
@@ -11,13 +12,15 @@
     public class SearchService : ISearchService
     {
         private readonly ImdbContext _context;
+        private readonly IMovieSearchRepository _movieSearchRepository;
 
-        public SearchService(ImdbContext context)
+        public SearchService(ImdbContext context, IMovieSearchRepository movieSearchRepository)
         {
             _context = context;
+            _movieSearchRepository = movieSearchRepository;
         }
 
-        public async Task<IEnumerable<SearchResultDTO>> SearchTitleAsync(string query)
+        public async Task<IEnumerable<SearchResultDTO>> SearchTitleByDatabaseAsync(string query)
         {
             var titleResults = await _context.TitleBasics
                                              .Where(t => t.PrimaryTitle.Contains(query))
@@ -30,6 +33,17 @@
                                              .ToListAsync();
 
             return titleResults;
+        }
+
+        public async Task<IEnumerable<SearchResultDTO>> SearchTitleAsync(string query)
+        {
+            var titleResults = await _movieSearchRepository.SearchMoviesAsync(query);
+            return titleResults.Select(t => new SearchResultDTO
+            {
+                Id = t.Tconst,
+                Type = "Title",
+                Name = t.PrimaryTitle
+            });
         }
 
         public async Task<IEnumerable<SearchResultDTO>> SearchPersonNameAsync(string query)
