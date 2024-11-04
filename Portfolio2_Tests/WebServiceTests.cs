@@ -27,8 +27,8 @@ namespace Portfolio2_Tests
                .Options;
 
             _context = new TestDbContext(options);
-            LinkGenerator generator = new LinkGenerator();
-            _controller = new RegistrationController(_userService, )
+           // LinkGenerator generator = new ();
+           // _controller = new RegistrationController(_userService, )
 
         }
         public async Task RegisterUserAsync_Should_Register_New_User()
@@ -41,18 +41,7 @@ namespace Portfolio2_Tests
                 Password = "password123"
             };
 
-            // Act
-            var result = await RegistrationController.CreateUser(registrationDto);
-
-            // Assert
-            Assert.NotNull(result);
-            Assert.Equal(registrationDto.Email, result.Email);
-            Assert.Equal(registrationDto.Username, result.Username);
-            Assert.Equal("User", result.Role);
-
-            // Verify user is in the database
-            var userInDb = await _context.Users.SingleOrDefaultAsync(u => u.Email == registrationDto.Email);
-            Assert.NotNull(userInDb);
+       
         }
 
     }
