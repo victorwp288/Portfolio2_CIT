@@ -31,8 +31,8 @@ namespace DataAcessLayer
             {
                 Console.WriteLine(item.Username);
 
-            }*/
-            if (ds.LoginUser("testuser1", "password123"))
+            }
+            if (ds.FunctionLoginUser("testuser1", "password123"))
             {
                 Console.WriteLine("Login successful!");
             }
@@ -40,10 +40,42 @@ namespace DataAcessLayer
             {
                 Console.WriteLine("Login failed.");
             }
+            Console.WriteLine(ds.DeleteUser(59));*/
+            //Console.WriteLine(ds.UpdateUserEmail(id, "user6@example.com"));
+            //Console.WriteLine(ds.LoginUser("testuser20", "password123"));
+            //Console.WriteLine(ds.DeleteUser(59));
 
+            //Console.WriteLine(ds.LoginUser("testuser20", "password123"));
+            /*string[] keywords = { "aaa", "bbb", "ccc" };
+            int resultLimit = 10;
+            string sql = $"SELECT * from word_to_words_query({resultLimit}";
+            foreach (string keyword in keywords)
+            {
+                sql = sql + ",'" + keyword + "'";
+            }
+            sql = sql + ")";
+
+            Console.WriteLine(sql);*/
+
+
+            var outPut = ds.GetNameBasicByNconst("nm0000129");
+            Console.WriteLine(outPut.PrimaryName);
+            Console.WriteLine(outPut.PersonProfessions.Count());
+            Console.WriteLine(outPut.PersonKnownTitles.Count());
+            Console.WriteLine(outPut.TitlePrincipals.Count());
+            Console.WriteLine(outPut.BirthYear);
+            Console.WriteLine(outPut.NameRatings.WeightedRating);
+
+
+            var outPut2 = ds.GetTitleBasic("tt21880152");
+            Console.WriteLine(outPut2.PrimaryTitle);
+            Console.WriteLine(outPut2.TitleRating.AverageRating);
+            Console.WriteLine(outPut2.PersonKnownTitles.First().Nconst);
+            Console.WriteLine(outPut2.MovieGenres.First().Genre);
+            Console.WriteLine(ds.GetNumberOfTitleBasics());
 
         }
-        
+
     }
 }
 

@@ -9,6 +9,8 @@ using DataAcessLayer.Entities.Functions;
 using DataAcessLayer.Entities.Movies;
 using DataAcessLayer.Entities.Users;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+
 
 namespace DataAcessLayer.Context;
 public class ImdbContext : DbContext
@@ -55,8 +57,10 @@ public class ImdbContext : DbContext
         if (!optionsBuilder.IsConfigured)
         {
             optionsBuilder.LogTo(Console.WriteLine, Microsoft.Extensions.Logging.LogLevel.Information);
+            optionsBuilder.UseNpgsql("host=localhost;db=imdb;uid=postgres;pwd=2409");
         }
     }
+    
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -86,7 +90,7 @@ public class ImdbContext : DbContext
 
         modelBuilder.Entity<NameRating>().ToTable("name_ratings");
         modelBuilder.Entity<NameRating>().Property(x => x.Nconst).HasColumnName("nconst");
-        modelBuilder.Entity<NameRating>().Property(x => x.PrimaryName).HasColumnName("primary_name");
+        modelBuilder.Entity<NameRating>().Property(x => x.PrimaryName).HasColumnName("primaryname");
         modelBuilder.Entity<NameRating>().Property(x => x.WeightedRating).HasColumnName("weighted_rating");
 
 
@@ -247,6 +251,36 @@ public class ImdbContext : DbContext
             .HasMany(tb => tb.MovieGenres)
             .WithOne(mg => mg.TitleBasic)
             .HasForeignKey(mg => mg.Tconst);
+
+        // Configure one-to-many relationship between TitleBasic and MovieGenre
+        modelBuilder.Entity<TitleBasic>()
+            .HasMany(tb => tb.PersonKnownTitles)
+            .WithOne(pk => pk.TitleBasic)
+            .HasForeignKey(pk => pk.Tconst);
+
+        // Configure one-to-many relationship between NameBasic and PersonProfession
+        modelBuilder.Entity<NameBasic>()
+            .HasMany(nb => nb.PersonProfessions)
+            .WithOne(pp => pp.NameBasic)
+            .HasForeignKey(pp => pp.Nconst);
+
+        // Configure one-to-one relationship between NameBasic and NameRating
+        modelBuilder.Entity<NameBasic>()
+            .HasOne(nb => nb.NameRatings)
+            .WithOne(nr => nr.NameBasic)
+            .HasForeignKey<NameRating>(nr => nr.Nconst);
+
+        // Configure one-to-many relationship between NameBasic and PersonKnownTitle
+        modelBuilder.Entity<NameBasic>()
+            .HasMany(nb => nb.PersonKnownTitles)
+            .WithOne(pk => pk.NameBasic)
+            .HasForeignKey(pk => pk.Nconst);
+
+        // Configure one-to-many relationship between NameBasic and TitlePrincipal
+        modelBuilder.Entity<NameBasic>()
+            .HasMany(nb => nb.TitlePrincipals)
+            .WithOne(tp => tp.NameBasic)
+            .HasForeignKey(tp => tp.Nconst);
 
     }
 }
