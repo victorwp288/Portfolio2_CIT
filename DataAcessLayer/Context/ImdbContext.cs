@@ -10,6 +10,7 @@ using DataAcessLayer.Entities.Movies;
 using DataAcessLayer.Entities.Users;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Npgsql.EntityFrameworkCore.PostgreSQL;
 
 
 namespace DataAcessLayer.Context;
@@ -60,7 +61,6 @@ public class ImdbContext : DbContext
             optionsBuilder.UseNpgsql("host=localhost;db=imdb;uid=postgres;pwd=2409");
         }
     }
-    
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -80,7 +80,7 @@ public class ImdbContext : DbContext
         modelBuilder.Entity<UserBookmark>().Property(x => x.Note).HasColumnName("note");
         modelBuilder.Entity<UserBookmark>().Property(x => x.BookmarkDate).HasColumnName("bookmark_date");
 
-        modelBuilder.Entity<UserRatingReview>().ToTable("user_rating_reviews");
+        modelBuilder.Entity<UserRatingReview>().ToTable("user_ratings_reviews");
         modelBuilder.Entity<UserRatingReview>().Property(x => x.UserId).HasColumnName("user_id");
         modelBuilder.Entity<UserRatingReview>().Property(x => x.Tconst).HasColumnName("tconst");
         modelBuilder.Entity<UserRatingReview>().HasKey(x => new { x.UserId, x.Tconst });
@@ -115,6 +115,11 @@ public class ImdbContext : DbContext
         modelBuilder.Entity<UserSearchHistory>().Property(x => x.SearchQuery).HasColumnName("search_query");
         modelBuilder.Entity<UserSearchHistory>().Property(x => x.SearchDate).HasColumnName("search_date");
         modelBuilder.Entity<UserSearchHistory>().HasKey(x => new { x.UserId, x.SearchDate });
+        modelBuilder.Entity<UserSearchHistory>()
+       .HasOne(h => h.User) // Assuming a User property in UserSearchHistory
+       .WithMany() // Or specify the navigation property on the User entity
+       .HasForeignKey(h => h.UserId)
+       .OnDelete(DeleteBehavior.Cascade);// Enable cascade delete
 
         modelBuilder.Entity<Wi>().ToTable("wi");
         modelBuilder.Entity<Wi>().Property(x => x.Word).HasColumnName("word");
@@ -281,6 +286,17 @@ public class ImdbContext : DbContext
             .HasMany(nb => nb.TitlePrincipals)
             .WithOne(tp => tp.NameBasic)
             .HasForeignKey(tp => tp.Nconst);
+
+        // Configure one-to-many relationship between UserRatingReview and TitleBasic
+        modelBuilder.Entity<UserRatingReview>()
+            .HasOne(urr => urr.TitleBasic)
+            .WithMany(tb => tb.UserRatingReviews)
+            .HasForeignKey(tb => tb.Tconst);
+        // Configure one-to-many relationship between UserBookmark and TitleBasic
+        modelBuilder.Entity<UserBookmark>()
+            .HasOne(ubm => ubm.TitleBasic)
+            .WithMany(tb => tb.UserBookmarks)
+            .HasForeignKey(tb => tb.Tconst);
 
     }
 }

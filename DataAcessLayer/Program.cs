@@ -73,6 +73,8 @@ namespace DataAcessLayer
             Console.WriteLine(outPut2.PersonKnownTitles.First().Nconst);
             Console.WriteLine(outPut2.MovieGenres.First().Genre);
             Console.WriteLine(ds.GetNumberOfTitleBasics());
+            Console.WriteLine(ds.DeleteUsersAllSearchHistoriesByUserId(98));
+
 
         }
 

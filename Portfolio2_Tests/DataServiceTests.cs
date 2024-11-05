@@ -8,6 +8,8 @@ using DataAcessLayer.Entities.Users;
 using static System.Collections.Specialized.BitVector32;
 using DataAcessLayer.Context;
 using DataAcessLayer.Repositories.Implementations;
+using DataAcessLayer.Entities.Functions;
+using Microsoft.EntityFrameworkCore;
 
 namespace Portfolio2_Tests;
 
@@ -118,6 +120,72 @@ public class DataServiceTests
         _service.DeleteUser(id);
     }
 
+    
+
+    [Fact]
+    public void Function_Rate_Movie()
+    {
+        var id = _service.FunctionRegisterUser("testuser1", "testuser1@example.com", "password123");
+        string tConst = "tt9603212";
+        var result = _service.FunctionRateMovie(id, tConst, 7);
+        Assert.True(result);
+        var userRating = _service.GetUserRatingReviewWithUserIdAndTconst(id, tConst);
+        Assert.Equal(7, userRating.Rating);
+        _service.DeleteUserBookmark(id, tConst);
+        _service.DeleteUser(id);
+    }
+
+    [Fact]
+    public void Function_Manage_Bookmark()
+    {
+        var id = _service.FunctionRegisterUser("testuser1", "testuser1@example.com", "password123");
+        string tConst = "tt9603212";
+        var resultAddBmark = _service.FunctionAddBookmark(id, tConst, "A Movie of Tom");
+        var resultMngBmark = _service.FunctionManageBookmark(id, tConst, "It is a Good Movie");
+        Assert.True(resultMngBmark);
+        var bMarkMB = _service.GetUserBookmarkWithUserIdAndTconst(id, tConst);
+        Assert.Equal("It is a Good Movie", bMarkMB.Note);
+        _service.DeleteUserBookmark(id, tConst);
+        _service.DeleteUser(id);
+    }
+
+    [Fact]
+    public void Function_Add_Bookmark()
+    {
+        var id = _service.FunctionRegisterUser("testuser1", "testuser1@example.com", "password123");
+        string tConst = "tt9603212";
+        var resultAddBmark = _service.FunctionAddBookmark(id, tConst , "A Movie of Tom");
+        Assert.True(resultAddBmark);
+        var bMarkAB = _service.GetUserBookmarkWithUserIdAndTconst(id,tConst);
+        Assert.Equal("A Movie of Tom", bMarkAB.Note);
+        
+        _service.DeleteUserBookmark(id, tConst);
+        _service.DeleteUser(id); 
+    }
+    
+    [Fact]
+    public void Function_Other_Movies_Like_This()
+    {
+
+        var items = _service.FunctionOtherMoviesLikeThis("dangerous");
+        Assert.Equal(100216, items.Count);
+        Assert.Equal("tt8030814", items.First().Tconst);
+        Assert.Equal("The Blech Effect", items.First().PrimaryTitle);
+        Assert.Equal("tt8030814", items.Last().Tconst);
+        Assert.Equal("The Big Bang", items.Last().PrimaryTitle);
+    }
+
+
+    [Fact]
+    public void Function_Structured_Search()
+    {
+
+        var items = _service.FunctionStructuredSearch("Mission", "action","Tom Cruise");
+        Assert.Equal(1, items.Count);
+        Assert.Equal("tt9603212 ", items.First().Tconst);
+        Assert.Equal("Mission: Impossible - Dead Reckoning Part One", items.First().PrimaryTitle);
+    }
+
     [Fact]
     public void Function_Person_Words()
     {
@@ -185,5 +253,29 @@ public class DataServiceTests
         Assert.Equal("Tom Allom", items.Last().PrimaryName);
         Assert.Equal("Judas Priest: Battle Cry", items.Last().PrimaryTitle);
     }
+    /*
+    [Fact]
+    public void Function_Log_User_Search()
+    {
+        var id = _service.FunctionRegisterUser("testuser1", "testuser1@example.com", "password123");
+        string searchQuery = "adventure";
+        var result = _service.FunctionLogUserSearch(id, searchQuery);
+        Assert.True(result);
+        _service.DeleteUsersLastSearchHistoryByUserId(id);
+        _service.DeleteUser(id);
+    }
+    [Fact]
+    public void Function_Exact_Match_Query()
+    {
+        var items = _service.FunctionExactMatchQuery("adventure", "action", "dangerous");
+        string firstTconst = "tt0362619";
+        string lastTconst = "tt12415660";
+        Assert.Equal(2, items.Count);
+        Assert.Equal(firstTconst, items.First().Tconst);
+        Assert.Equal("Fans and Freaks: The Culture of Comics and Conventions", items.First().PrimaryTitle);
+        Assert.Equal(lastTconst, items.Last().Tconst);
+        Assert.Equal("Bazyl", items.Last().PrimaryTitle);
+    }
+ */
 
 }

@@ -90,10 +90,69 @@ namespace DataAcessLayer.Repositories.Implementations
             return _context.SaveChanges() > 0;
 
         }
+
         public bool FunctionLogUserSearch(int inputUserId, string searchQuery)
         {
             return VoidBool($"SELECT log_user_search({inputUserId}, '{searchQuery}')");
 
+        }
+
+        public UserSearchHistory GetUsersLastSearchHistoryByUserId(int inputUserId)
+        {
+            return _context.UserSearchHistories.Where(x => x.UserId == inputUserId).Where(x => x.UserId == inputUserId)
+                   .OrderByDescending(x => x.SearchDate)
+                   .FirstOrDefault();
+        }
+
+        public bool DeleteUsersLastSearchHistoryByUserId(int inputUserId)
+        {
+            var uSearchHistories = _context.UserSearchHistories
+                .Where(x => x.UserId == inputUserId)
+                   .OrderByDescending(x => x.SearchDate)
+                   .FirstOrDefault(); 
+            if (uSearchHistories is null)
+            {
+                return false;
+            }
+            
+            _context.UserSearchHistories.Remove(uSearchHistories);
+            return _context.SaveChanges() > 0;
+        }
+
+
+
+        public bool FunctionRateMovie(int inputUserId, string inputMovieId, int newRating)
+        {
+            return VoidBool($"SELECT rate_movie({inputUserId}, '{inputMovieId}', '{newRating}')");
+        }
+
+        public UserRatingReview GetUserRatingReviewWithUserIdAndTconst(int inputUserId, string inputTconst)
+        {
+            return _context.UserRatingReviews.FirstOrDefault(x => x.UserId == inputUserId && x.Tconst == inputTconst);
+        }
+                     
+
+        public bool DeleteUserRatingReview(int inputUserId, string inputTconst)
+        {
+            var uRatingReview = _context.UserRatingReviews.FirstOrDefault(x => x.UserId == inputUserId && x.Tconst == inputTconst); ;
+
+            if (uRatingReview == null)
+            {
+                return false;
+            }
+            _context.UserRatingReviews.Remove(uRatingReview);
+            return _context.SaveChanges() > 0;
+        }
+
+        public IList<UserBookmark> GetUserBookmarkWithUserId(int inputUserId)
+        { 
+            return _context.UserBookmarks.Where(x => x.UserId == inputUserId).ToList(); 
+            
+        }
+
+        public UserBookmark GetUserBookmarkWithUserIdAndTconst(int inputUserId, string inputTconst)
+        {
+            return _context.UserBookmarks.FirstOrDefault(x => x.UserId == inputUserId && x.Tconst== inputTconst);
         }
 
         public bool FunctionAddBookmark(int inputUserId, string inputMovieId, string note)
@@ -106,29 +165,39 @@ namespace DataAcessLayer.Repositories.Implementations
             return VoidBool($"SELECT manage_bookmark({inputUserId}, '{inputMovieId}', '{note}')");
 
         }
-        public bool FunctionRateMovie(int inputUserId, string inputMovieId, int newRating)
+
+        public bool DeleteUserBookmark(int inputUserId, string inputTconst)
         {
-            return VoidBool($"SELECT rate_movie({inputUserId}, '{inputMovieId}', {newRating})");
+            var uBookmark = _context.UserBookmarks.FirstOrDefault(x => x.UserId == inputUserId && x.Tconst == inputTconst); ;
+
+            if (uBookmark == null)
+            {
+                return false;
+            }
+            _context.UserBookmarks.Remove(uBookmark);
+            return _context.SaveChanges() > 0;
         }
+
 
         public IList<TconstAndPrimaryTitle> FunctionExactMatchQuery(string w1Text, string w2Text, string w3Text)
         {
-            return _context.TconstAndPrimaryTitles.FromSqlInterpolated($"SELECT * from exact_match_query('{w1Text}', '{w2Text}', '{w3Text}')").ToList();
+            return _context.TconstAndPrimaryTitles.FromSqlInterpolated($"SELECT * from exact_match_query({w1Text}, {w2Text}, {w3Text})").ToList();
         }
 
         public IList<TconstAndPrimaryTitle> FunctionOtherMoviesLikeThis(string pSearchName)
         {
-            return _context.TconstAndPrimaryTitles.FromSqlInterpolated($"SELECT * from other_movies_like_this('{pSearchName}')").ToList();
+            return _context.TconstAndPrimaryTitles.FromSqlInterpolated($"SELECT * from other_movies_like_this({pSearchName})").ToList();
         }
 
         public IList<TconstAndPrimaryTitle> FunctionSearchMovies(string pSearchText)
         {
-            return _context.TconstAndPrimaryTitles.FromSqlInterpolated($"SELECT * from search_movies('{pSearchText}')").ToList();
+            return _context.TconstAndPrimaryTitles.FromSqlInterpolated($"SELECT * from search_movies({pSearchText})").ToList();
         }
 
         public IList<TconstAndPrimaryTitle> FunctionStructuredSearch(string pTitle, string pPlot, string pActor)
         {
-            return _context.TconstAndPrimaryTitles.FromSqlInterpolated($"SELECT * from structured_search('{pTitle}', '{pPlot}', '{pActor}')").ToList();
+            return _context.TconstAndPrimaryTitles.FromSqlInterpolated($"SELECT * from structured_search({pTitle}, {pPlot}, {pActor})").ToList();
+        
         }
 
         public IList<WordAndFrequency> FunctionPersonWords(string pName, int pLimit)

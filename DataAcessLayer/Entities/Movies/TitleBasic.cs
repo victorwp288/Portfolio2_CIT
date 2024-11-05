@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using static System.Net.Mime.MediaTypeNames;
+using DataAcessLayer.Entities.Users;
 
 namespace DataAcessLayer.Entities.Movies
 {
@@ -27,8 +28,8 @@ namespace DataAcessLayer.Entities.Movies
 
         public ICollection<PersonKnownTitle> PersonKnownTitles { get; set; }
         public TitleRating TitleRating { get; set; }
-
+        public ICollection<UserRatingReview> UserRatingReviews { get; set; }
         public ICollection<MovieGenre> MovieGenres { get; set; }
-
+        public ICollection<UserBookmark> UserBookmarks { get; set; }
     }
 }

@@ -67,4 +67,18 @@ public interface IDataService
     public IList<NameBasic> GetNameBasics();
 
     NameBasic GetNameBasicByNconst(string nConst);
+
+    bool DeleteUserBookmark(int inputUserId, string inputTconst);
+
+    UserBookmark GetUserBookmarkWithUserIdAndTconst(int inputUserId, string inputTconst);
+
+    IList<UserBookmark> GetUserBookmarkWithUserId(int inputUserId);
+
+    UserRatingReview GetUserRatingReviewWithUserIdAndTconst(int inputUserId, string inputTconst);
+
+    bool DeleteUserRatingReview(int inputUserId, string inputTconst);
+
+    bool DeleteUsersLastSearchHistoryByUserId(int inputUserId);
+
+    UserSearchHistory GetUsersLastSearchHistoryByUserId(int inputUserId);
 }
