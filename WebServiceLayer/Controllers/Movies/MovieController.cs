@@ -42,7 +42,7 @@ namespace WebServiceLayer.Controllers.Movies
             {
                 return NotFound();
             }
-            var model = CreateMovie(category);
+            var model = CreateMovieModel(category);
 
             return Ok(model);
         }
@@ -86,10 +86,10 @@ namespace WebServiceLayer.Controllers.Movies
         }
 
         // Helper method to create a MovieModel from a TitleBasic entity
-        private Movie CreateMovie(TitleDTO title)
+        private MovieModel CreateMovieModel(TitleDTO title)
         {
             // Map TitleBasic entity properties to MovieModel properties
-            var model = title.Adapt<Movie>();
+            var model = title.Adapt<MovieModel>();
 
             // Generate URL for accessing details of the current movie and add to the model
             model.Url = GetUrl(nameof(GetTitleByIdAsync), new { title.TConst });

@@ -35,12 +35,13 @@ public class UserController : BaseController
         {
             return NotFound();
         }
-        var model = CreateUser(category);
+        var model = CreateUserModel(category);
 
         return Ok(model);
     }
 
-    private UserModel CreateUser([FromBody] UserDTO user)
+    //map the user entity to the user model
+    private UserModel CreateUserModel([FromBody] UserDTO user)
     {
         // Map TitleBasic entity properties to MovieModel properties
         var model = user.Adapt<UserModel>();
