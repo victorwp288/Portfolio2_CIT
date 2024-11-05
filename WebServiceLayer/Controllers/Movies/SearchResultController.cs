@@ -42,7 +42,7 @@ namespace WebServiceLayer.Controllers.Movies;
         }
 
 
-    private SearchResultDTO SearchResultModel(SearchResultDTO searchresult)
+    private SearchResultModel SearchResultModel(SearchResultModel searchresult)
         {
             // If the title is null, return null (avoiding null reference exceptions)
             if (searchresult == null)
@@ -50,7 +50,7 @@ namespace WebServiceLayer.Controllers.Movies;
                 return null;
             }
             // Map TitleBasic entity properties to TitleBasicModel properties
-            var model = searchresult.Adapt<SearchResultDTO>();
+            var model = searchresult.Adapt<SearchResultModel>();
 
             // Generate URL for accessing details of the current movie and add to the model
             model.Url = GetUrl(nameof(SearchAsync), new { searchresult.Name });

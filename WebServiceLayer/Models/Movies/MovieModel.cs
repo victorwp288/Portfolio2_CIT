@@ -1,6 +1,6 @@
 ﻿namespace WebServiceLayer.Models.Movies
 {
-    public class Movie
+    public class MovieModel
     {
         public string? Url { get; set; }
         public string TConst { get; set; }

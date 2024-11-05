@@ -40,10 +40,10 @@ public class UserController : BaseController
         return Ok(model);
     }
 
-    private User CreateUser([FromBody] UserDTO user)
+    private UserModel CreateUser([FromBody] UserDTO user)
     {
         // Map TitleBasic entity properties to MovieModel properties
-        var model = user.Adapt<User>();
+        var model = user.Adapt<UserModel>();
 
         // Generate URL for accessing details of the current movie and add to the model
         model.Url = GetUrl(nameof(GetUserByIdAsync), new { user.UserId });
