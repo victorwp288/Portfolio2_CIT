@@ -75,4 +75,15 @@ public class UserRatingController : BaseController
             new { userId = rating.UserId, tconst = rating.TConst });
         return model;
     }
+
+    [HttpPut("{userId}/{tconst}")]
+    public async Task<IActionResult> UpdateUserRatingAsync(int userId, string tconst, UpdateRatingModel model)
+    {
+        var rating = await _ratingService.GetUserRatingAsync(userId, tconst);
+
+        rating.Rating = model.Rating;
+        rating.Review = model.Review;
+
+        return Ok(rating);
+    }
 }
