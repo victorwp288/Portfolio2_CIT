@@ -5,10 +5,5 @@ Accept: application/json
 
 ###
 
-POST {{WebServiceLayer_HostAddress}}/api/movies
-Content-Type: application/json
-{
-    "Tconst": "test",
-    "TitleType": "test",
-    "PrimaryTitle": "test"
-}
+Get {{WebServiceLayer_HostAddress}}/api/movies
+Accept: application/json

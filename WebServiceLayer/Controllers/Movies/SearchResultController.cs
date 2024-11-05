@@ -30,7 +30,7 @@ namespace WebServiceLayer.Controllers.Movies;
             _linkGenerator = linkGenerator;
         }
 
-           // GET method to retrieve a list of movies based on search result
+       /*    // GET method to retrieve a list of movies based on search result
         [HttpGet("{search}", Name = nameof(SearchAsync))]
         public IActionResult SearchAsync(string search)
         {
@@ -40,8 +40,8 @@ namespace WebServiceLayer.Controllers.Movies;
 
             return Ok(searchresults);
         }
-
-
+       */
+/*
     private SearchResultDTO SearchResultModel(SearchResultDTO searchresult)
         {
             // If the title is null, return null (avoiding null reference exceptions)
@@ -57,5 +57,5 @@ namespace WebServiceLayer.Controllers.Movies;
 
             return model;
         }
-
+*/
     }
