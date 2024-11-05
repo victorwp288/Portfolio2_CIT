@@ -42,7 +42,7 @@ namespace WebServiceLayer.Controllers.Movies;
         }
 
 
-    private SearchResultModel SearchResultModel(SearchResultModel searchresult)
+    private SearchResultModel SearchResultModel(SearchResultDTO searchresult)
         {
             // If the title is null, return null (avoiding null reference exceptions)
             if (searchresult == null)
