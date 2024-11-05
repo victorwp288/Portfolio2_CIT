@@ -3,14 +3,18 @@ using BusinessLayer.Interfaces;
 using DataAcessLayer;
 using DataAcessLayer.Entities.Movies;
 using Mapster;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WebServiceLayer.Models.Movies;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 
 
 
 namespace WebServiceLayer.Controllers.Movies
 {
     // Attribute indicating this class is an API controller, and setting the base route to "api/movies"
+    
     [ApiController]
     [Route("api/movies")]
     public class MovieController : BaseController
@@ -31,7 +35,7 @@ namespace WebServiceLayer.Controllers.Movies
             _titleService = titleService;
             _linkGenerator = linkGenerator;
         }
-
+        [Authorize]
         // GET method to retrieve a specific movie by its unique identifier
         [HttpGet("{id}", Name = nameof(GetTitleByIdAsync))]
         public async Task<IActionResult> GetTitleByIdAsync(string id)
@@ -48,6 +52,7 @@ namespace WebServiceLayer.Controllers.Movies
         }
 
         // GET method to retrieve a list of movies, with optional pagination parameters
+        
         [HttpGet(Name = nameof(GetMovies))]
         public IActionResult GetMovies(int page = 0, int pageSize = 5)
         {

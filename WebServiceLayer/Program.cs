@@ -7,6 +7,10 @@ using DataAcessLayer.Repositories.Implementations;
 using Mapster;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Reflection;
+using System.Text;
 using DataAcessLayer.Entities.Users; // For UserRole enum
 using Npgsql.EntityFrameworkCore.PostgreSQL; // Add this
 
@@ -17,7 +21,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Configure Entity Framework Core to use PostgreSQL as the database provider
 builder.Services.AddDbContext<ImdbContext>(options =>
-    options.UseNpgsql("host=localhost;db=imdb;uid=postgres;pwd=Hejmed12!"));
+    options.UseNpgsql("host=localhost;db=imdb;uid=postgres;pwd=2409"));
 
 // Register IDataService with its implementation, DataService, using scoped lifetime
 builder.Services.AddScoped<IDataService, DataService>();
@@ -43,8 +47,35 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-var app = builder.Build();
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+}).AddJwtBearer(options =>
+{
+    options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
 
+    {
+
+        ValidateIssuer = true,
+
+        ValidateAudience = true,
+
+        ValidateLifetime = true,
+
+        ValidateIssuerSigningKey = true,
+
+        ValidIssuer = builder.Configuration["Jwt: Issuer"],
+
+        ValidAudience = builder.Configuration["Jwt: Audience"],
+
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
+    };
+});
+
+
+var app = builder.Build();
+app.UseAuthentication();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {

@@ -58,21 +58,21 @@ namespace DataAcessLayer
             Console.WriteLine(sql);*/
 
 
-            var outPut = ds.GetNameBasicByNconst("nm0000129");
-            Console.WriteLine(outPut.PrimaryName);
-            Console.WriteLine(outPut.PersonProfessions.Count());
-            Console.WriteLine(outPut.PersonKnownTitles.Count());
-            Console.WriteLine(outPut.TitlePrincipals.Count());
-            Console.WriteLine(outPut.BirthYear);
-            Console.WriteLine(outPut.NameRatings.WeightedRating);
+            /* var outPut = ds.GetNameBasicByNconst("nm0000129");
+             Console.WriteLine(outPut.PrimaryName);
+             Console.WriteLine(outPut.PersonProfessions.Count());
+             Console.WriteLine(outPut.PersonKnownTitles.Count());
+             Console.WriteLine(outPut.TitlePrincipals.Count());
+             Console.WriteLine(outPut.BirthYear);
+             Console.WriteLine(outPut.NameRatings.WeightedRating);
 
-
-            var outPut2 = ds.GetTitleBasic("tt21880152");
-            Console.WriteLine(outPut2.PrimaryTitle);
-            Console.WriteLine(outPut2.TitleRating.AverageRating);
-            Console.WriteLine(outPut2.PersonKnownTitles.First().Nconst);
-            Console.WriteLine(outPut2.MovieGenres.First().Genre);
-            Console.WriteLine(ds.GetNumberOfTitleBasics());
+             var outPut2 = ds.GetTitleBasic("tt21880152");
+             Console.WriteLine(outPut2.PrimaryTitle);
+             Console.WriteLine(outPut2.TitleRating.AverageRating);
+             Console.WriteLine(outPut2.PersonKnownTitles.First().Nconst);
+             Console.WriteLine(outPut2.MovieGenres.First().Genre);
+             Console.WriteLine(ds.GetNumberOfTitleBasics());*/
+            Console.WriteLine(ds.FunctionLoginUser("testuser1", "password123"));
 
         }
 
