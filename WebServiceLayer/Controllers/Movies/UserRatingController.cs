@@ -42,18 +42,25 @@ public class UserRatingController : BaseController
             return NotFound();
         }
 
-        var model = CreateRating(rating);
+        var model = CreateRatingModel(rating);
 
         return Ok(model);
     }
 
-    private UserRating CreateRating(UserRatingDTO rating)
+    private UserRating CreateRatingModel(UserRatingDTO rating)
     {
         var model = rating.Adapt<UserRating>();
 
         model.Url = GetUrl(nameof(GetUserRatingAsync), new { userId = rating.UserId, tconst = rating.TConst });
 
         return model;
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> CreateRating(CreateRatingModel model)
+    {
+        var rating = await _ratingService.SubmitUserRatingAsync(model);
+        return Ok(CreateRatingModel(rating));
     }
 
 }
