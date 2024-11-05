@@ -1,6 +1,6 @@
 ﻿namespace WebServiceLayer.Models.Movies
 {
-    public class SearchResultDTO
+    public class SearchResultModel
     {
         public string Url { get; set; }
         public string Id { get; set; } // TConst or NConst
