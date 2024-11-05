@@ -57,5 +57,16 @@ public class UserRatingController : BaseController
 
         return model;
     }
+<<<<<<< Updated upstream
 
+=======
+/*
+    [HttpPost]
+    public async Task<IActionResult> CreateRating(CreateRatingModel model)
+    {
+        var rating = await _ratingService.SubmitUserRatingAsync(model);
+        return Ok(CreateRatingModel(rating));
+    }
+*/
+>>>>>>> Stashed changes
 }
