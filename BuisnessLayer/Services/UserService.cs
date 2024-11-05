@@ -3,12 +3,11 @@
     using BusinessLayer.DTOs;
     using BusinessLayer.Interfaces;
     using DataAcessLayer.Context;
-    using DataAcessLayer.Entities.Users;
+    using DataAcessLayer.Repositories.Implementations;
     using Microsoft.EntityFrameworkCore;
     using Npgsql;
     using System;
     using System.Threading.Tasks;
-
 
 
     // Adjusted namespace for User
@@ -16,50 +15,40 @@
     public class UserService : IUserService
     {
         private readonly ImdbContext _context;
+        private readonly UserRepository _userRepository;
 
         public UserService(ImdbContext context)
         {
             _context = context;
+            _userRepository = new UserRepository(context);
         }
 
         public async Task<UserDTO> RegisterUserAsync(UserRegistrationDTO registrationDto)
         {
-            // Validate input
-            if (string.IsNullOrWhiteSpace(registrationDto.Email) || string.IsNullOrWhiteSpace(registrationDto.Password))
-                throw new ArgumentException("Email and password are required.");
-
-            // Check if email already exists
-            var existingUser = await _context.Users.SingleOrDefaultAsync(u => u.Email == registrationDto.Email);
-            if (existingUser != null)
-                throw new InvalidOperationException("Email is already registered.");
-
-            // Hash the password (implement a proper hashing mechanism)
-            var passwordHash = HashPassword(registrationDto.Password);
-
-            // Create a new User entity
-            var user = new User
+            try
             {
-                Email = registrationDto.Email,
-                Username = registrationDto.Username,
-                PasswordHash = passwordHash,
-                CreatedAt = DateTime.UtcNow,
-                Role = UserRole.user
-            };
+                await _userRepository.RegisterUserAsync(
+                    registrationDto.Username,
+                    registrationDto.Email,
+                    registrationDto.Password
+                );
 
-            // Add user to the database
-            await _context.Users.AddAsync(user);
-            await _context.SaveChangesAsync();
+                // Get the newly created user from the database
+                var user = await _context.Users
+                    .FirstOrDefaultAsync(u => u.Username == registrationDto.Username);
 
-            // Map to UserDTO
-            var userDto = new UserDTO
+                return new UserDTO
+                {
+                    UserId = user.UserId,
+                    Username = user.Username,
+                    Email = user.Email,
+                    Role = user.Role
+                };
+            }
+            catch (Exception ex)
             {
-                UserId = user.UserId,
-                Email = user.Email,
-                Username = user.Username,
-                Role = user.Role
-            };
-
-            return userDto;
+                throw new Exception("Error registering user", ex);
+            }
         }
 
         public async Task<UserDTO> AuthenticateUserAsync(string email, string password)
