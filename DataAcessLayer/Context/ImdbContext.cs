@@ -1,15 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
-using DataAcessLayer.Entities.Functions;
+﻿using DataAcessLayer.Entities.Functions;
 using DataAcessLayer.Entities.Movies;
 using DataAcessLayer.Entities.Users;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 
 
 namespace DataAcessLayer.Context;
@@ -60,7 +53,7 @@ public class ImdbContext : DbContext
             optionsBuilder.UseNpgsql("host=localhost;db=imdb;uid=postgres;pwd=Ferieland128");
         }
     }
-    
+
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -82,7 +75,7 @@ public class ImdbContext : DbContext
         modelBuilder.Entity<UserBookmark>().Property(x => x.Note).HasColumnName("note");
         modelBuilder.Entity<UserBookmark>().Property(x => x.BookmarkDate).HasColumnName("bookmark_date");
 
-        modelBuilder.Entity<UserRatingReview>().ToTable("user_rating_reviews");
+        modelBuilder.Entity<UserRatingReview>().ToTable("user_ratings_reviews");
         modelBuilder.Entity<UserRatingReview>().Property(x => x.UserId).HasColumnName("user_id");
         modelBuilder.Entity<UserRatingReview>().Property(x => x.Tconst).HasColumnName("tconst");
         modelBuilder.Entity<UserRatingReview>().HasKey(x => new { x.UserId, x.Tconst });
@@ -286,5 +279,16 @@ public class ImdbContext : DbContext
 
         // Add enum mapping
         modelBuilder.HasPostgresEnum<UserRole>();
+
+        // Add this configuration for UserRatingReview
+        modelBuilder.Entity<UserRatingReview>()
+            .HasOne(ur => ur.TitleBasic)
+            .WithMany()
+            .HasForeignKey(ur => ur.Tconst);
+
+        modelBuilder.Entity<UserRatingReview>()
+            .HasOne(ur => ur.User)
+            .WithMany()
+            .HasForeignKey(ur => ur.UserId);
     }
 }
