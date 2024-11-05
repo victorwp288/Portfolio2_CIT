@@ -4,7 +4,11 @@ using BusinessLayer.Interfaces;
 using BusinessLayer.DTOs;
 using WebServiceLayer.Models.Users;
 using WebServiceLayer.Models.Movies;
-using DataAcessLayer;   
+using DataAcessLayer;
+using DataAccessLayer.Repositories.Implementations;
+using DataAcessLayer.Repositories.Interfaces;
+using BuisnessLayer.Interfaces;
+using BuisnessLayer.DTOs;
 
 namespace WebServiceLayer.Controllers.Users;
 
@@ -13,15 +17,17 @@ namespace WebServiceLayer.Controllers.Users;
 [Route("api/users")]
 public class UserController : BaseController
 {
-
+    IBookmarkService _bookmarkService;
     IUserService _userService;
     private readonly LinkGenerator _linkGenerator;
 
     public UserController(
         IUserService userService,
+        IBookmarkService bookmarkService,
         LinkGenerator linkGenerator)
         : base(linkGenerator)
     {
+        _bookmarkService = bookmarkService;
         _userService = userService;
         _linkGenerator = linkGenerator;
     }
@@ -82,5 +88,16 @@ public class UserController : BaseController
         await _userService.DeleteUserAsync(userId);
         return Ok();
     }
+
+    [HttpPost("{userId}/{tconst}")]
+    
+    //create a bookmark
+    public async Task<IActionResult> CreateBookmark(CreateBookmarkModel model)
+    {
+        var DTO = model.Adapt<BookmarkDTO>();
+        await _bookmarkService.CreateBookmarkAsync(DTO);
+        return Ok();
+    }
+
 
 }
