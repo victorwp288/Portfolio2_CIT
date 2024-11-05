@@ -58,6 +58,20 @@ public class SearchResultController : BaseController
         return Ok(searchResults.Select(SearchResultModel));
     }
 
+    [HttpGet("search/titles/{query}/{userId}", Name = nameof(SearchTitlesWithHistoryAsync))]
+    public async Task<IActionResult> SearchTitlesWithHistoryAsync(string query, int userId)
+    {
+        var searchResults = await _searchService.SearchTitleAsync(query, userId);
+        return Ok(searchResults.Select(SearchResultModel));
+    }
+
+    [HttpGet("search/titles/database/{query}/{userId}", Name = nameof(SearchTitlesByDatabaseWithHistoryAsync))]
+    public async Task<IActionResult> SearchTitlesByDatabaseWithHistoryAsync(string query, int userId)
+    {
+        var searchResults = await _searchService.SearchTitleByDatabaseAsync(query, userId);
+        return Ok(searchResults.Select(SearchResultModel));
+    }
+
     private SearchResultModel SearchResultModel(SearchResultDTO searchresult)
     {
         // If the title is null, return null (avoiding null reference exceptions)

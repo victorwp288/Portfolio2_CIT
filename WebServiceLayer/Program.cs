@@ -4,11 +4,10 @@ using DataAccessLayer.Repositories.Implementations;
 using DataAcessLayer;
 using DataAcessLayer.Context;
 using DataAcessLayer.Repositories.Implementations;
+using DataAcessLayer.Repositories.Interfaces;
 using Mapster;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
-using DataAcessLayer.Entities.Users; // For UserRole enum
-using Npgsql.EntityFrameworkCore.PostgreSQL; // Add this
 
 // Enable unmapped types globally
 NpgsqlConnection.GlobalTypeMapper.MapEnum<UserRole>("user_role");
@@ -28,11 +27,14 @@ builder.Services.AddScoped<IUserService, UserService>();
 
 builder.Services.AddScoped<IRatingService, RatingService>();
 
-// Register the repository
-builder.Services.AddScoped<IMovieSearchRepository, MovieSearchRepository>();
+// Get the connection string from ImdbContext
+var connectionString = "host=localhost;db=imdb;uid=postgres;pwd=Hejmed12!";
 
-// Register the search service
+// Register repositories
+builder.Services.AddScoped<IMovieSearchRepository, MovieSearchRepository>();
 builder.Services.AddScoped<ISearchService, SearchService>();
+builder.Services.AddScoped<ISearchHistoryRepository>(provider =>
+    new SearchHistoryRepository(connectionString));
 
 // Register Mapster to handle object mapping automatically between data models and DTOs
 builder.Services.AddMapster();
