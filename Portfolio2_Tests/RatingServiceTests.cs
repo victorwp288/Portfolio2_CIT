@@ -1,13 +1,10 @@
-﻿using Xunit;
-using BusinessLayer.Services;
+﻿using BusinessLayer.DTOs;
 using BusinessLayer.Interfaces;
-using BusinessLayer.DTOs;
-using Microsoft.EntityFrameworkCore;
-using DataAcessLayer.Entities.Users;
-using DataAcessLayer.Entities.Movies;
-using System.Threading.Tasks;
-using System;
+using BusinessLayer.Services;
 using DataAcessLayer.Context;
+using DataAcessLayer.Entities.Movies;
+using DataAcessLayer.Entities.Users;
+using Microsoft.EntityFrameworkCore;
 
 namespace Portfolio2_Tests
 {
@@ -40,7 +37,7 @@ namespace Portfolio2_Tests
                 Username = "User",
                 PasswordHash = "password123",
                 CreatedAt = DateTime.UtcNow,
-                Role = "User"
+                Role = UserRole.user
             });
 
             // Add a title

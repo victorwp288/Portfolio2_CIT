@@ -35,7 +35,7 @@ namespace Portfolio2_Tests
                 Username = "ExistingUser",
                 PasswordHash = BCrypt.Net.BCrypt.HashPassword("password123"),
                 CreatedAt = DateTime.UtcNow,
-                Role = "User"
+                Role = UserRole.user
             });
             _context.SaveChanges();
         }

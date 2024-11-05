@@ -26,7 +26,7 @@ namespace Portfolio2_Tests
                 Email = "testuser@test.com",
                 PasswordHash = "password123", // In real implementation, this should be hashed
                 CreatedAt = DateTime.UtcNow,
-                Role = "User"
+                Role = UserRole.user
             });
             _context.SaveChanges();
 

@@ -1,5 +1,5 @@
 using DataAcessLayer.Entities.Functions;
-using DataAcessLayer.Repositories.Interfaces;
+using DataAcessLayer.Entities.Movies;
 using Npgsql;
 
 namespace DataAcessLayer.Repositories.Implementations
@@ -8,12 +8,12 @@ namespace DataAcessLayer.Repositories.Implementations
     {
         public MovieSearchRepository(string connectionString) : base(connectionString) { }
 
-        public async Task<IEnumerable<TconstAndPrimaryTitle>> SearchMoviesAsync(string searchText)
+        public async Task<IEnumerable<TitleBasic>> SearchMoviesAsync(string searchText)
         {
             const string sql = "SELECT * FROM search_movies(@searchText)";
             var parameters = new[] { new NpgsqlParameter("@searchText", searchText) };
 
-            return await QueryAsync(sql, reader => new TconstAndPrimaryTitle
+            return await QueryAsync(sql, reader => new TitleBasic
             {
                 Tconst = reader.GetString(0),
                 PrimaryTitle = reader.GetString(1)
@@ -25,10 +25,10 @@ namespace DataAcessLayer.Repositories.Implementations
             const string sql = "SELECT * FROM best_match_query(@w1, @w2, @w3)";
             var parameters = new[]
             {
-                new NpgsqlParameter("@w1", w1),
-                new NpgsqlParameter("@w2", w2),
-                new NpgsqlParameter("@w3", w3)
-            };
+                    new NpgsqlParameter("@w1", w1),
+                    new NpgsqlParameter("@w2", w2),
+                    new NpgsqlParameter("@w3", w3)
+                };
 
             return await QueryAsync(sql, reader => new BestMatchQuery
             {
@@ -43,10 +43,10 @@ namespace DataAcessLayer.Repositories.Implementations
             const string sql = "SELECT * FROM structured_search(@title, @plot, @actor)";
             var parameters = new[]
             {
-                new NpgsqlParameter("@title", title),
-                new NpgsqlParameter("@plot", plot),
-                new NpgsqlParameter("@actor", actor)
-            };
+                    new NpgsqlParameter("@title", title),
+                    new NpgsqlParameter("@plot", plot),
+                    new NpgsqlParameter("@actor", actor)
+                };
 
             return await QueryAsync(sql, reader => new TconstAndPrimaryTitle
             {
@@ -72,10 +72,10 @@ namespace DataAcessLayer.Repositories.Implementations
             const string sql = "SELECT * FROM exact_match_query(@w1, @w2, @w3)";
             var parameters = new[]
             {
-                new NpgsqlParameter("@w1", w1),
-                new NpgsqlParameter("@w2", w2),
-                new NpgsqlParameter("@w3", w3)
-            };
+                    new NpgsqlParameter("@w1", w1),
+                    new NpgsqlParameter("@w2", w2),
+                    new NpgsqlParameter("@w3", w3)
+                };
 
             return await QueryAsync(sql, reader => new TconstAndPrimaryTitle
             {
@@ -86,4 +86,4 @@ namespace DataAcessLayer.Repositories.Implementations
 
         // Implement other methods similarly
     }
-} 
+}

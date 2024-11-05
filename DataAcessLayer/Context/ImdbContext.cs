@@ -71,7 +71,9 @@ public class ImdbContext : DbContext
         modelBuilder.Entity<User>().Property(x => x.Email).HasColumnName("email");
         modelBuilder.Entity<User>().Property(x => x.PasswordHash).HasColumnName("password_hash");
         modelBuilder.Entity<User>().Property(x => x.CreatedAt).HasColumnName("created_at");
-        modelBuilder.Entity<User>().Property(x => x.Role).HasColumnName("role");
+        modelBuilder.Entity<User>().Property(x => x.Role)
+            .HasColumnName("role")
+            .HasColumnType("user_role");
 
         modelBuilder.Entity<UserBookmark>().ToTable("user_bookmarks");
         modelBuilder.Entity<UserBookmark>().Property(x => x.UserId).HasColumnName("user_id");
@@ -282,5 +284,7 @@ public class ImdbContext : DbContext
             .WithOne(tp => tp.NameBasic)
             .HasForeignKey(tp => tp.Nconst);
 
+        // Add enum mapping
+        modelBuilder.HasPostgresEnum<UserRole>();
     }
 }

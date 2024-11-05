@@ -6,6 +6,12 @@ using DataAcessLayer.Context;
 using DataAcessLayer.Repositories.Implementations;
 using Mapster;
 using Microsoft.EntityFrameworkCore;
+using Npgsql;
+using DataAcessLayer.Entities.Users; // For UserRole enum
+using Npgsql.EntityFrameworkCore.PostgreSQL; // Add this
+
+// Enable unmapped types globally
+NpgsqlConnection.GlobalTypeMapper.MapEnum<UserRole>("user_role");
 
 var builder = WebApplication.CreateBuilder(args);
 

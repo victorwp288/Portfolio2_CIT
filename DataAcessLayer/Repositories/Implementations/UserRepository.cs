@@ -1,8 +1,8 @@
-﻿using DataAcessLayer.Repositories.Interfaces;
-using Npgsql;
-using Microsoft.EntityFrameworkCore;
-using DataAcessLayer.Context;
+﻿using DataAcessLayer.Context;
 using DataAcessLayer.Entities.Users;
+using DataAcessLayer.Repositories.Interfaces;
+using Microsoft.EntityFrameworkCore;
+using Npgsql;
 namespace DataAcessLayer.Repositories.Implementations
 {
     public class UserRepository : BaseRepository, IUserRepository
@@ -44,7 +44,7 @@ namespace DataAcessLayer.Repositories.Implementations
                     Email = email,
                     PasswordHash = password,
                     CreatedAt = DateTime.UtcNow,
-                    Role = "User"
+                    Role = UserRole.user // Fixing the type conversion issue
                 };
                 await _context.Users.AddAsync(user);
                 await _context.SaveChangesAsync();

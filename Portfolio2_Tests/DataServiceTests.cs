@@ -1,12 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Xunit;
+﻿using DataAcessLayer.Context;
 using DataAcessLayer.Entities.Users;
-using static System.Collections.Specialized.BitVector32;
-using DataAcessLayer.Context;
 using DataAcessLayer.Repositories.Implementations;
 
 namespace Portfolio2_Tests;
@@ -105,7 +98,7 @@ public class DataServiceTests
         var user = _service.GetUserById(id);
         Assert.Equal("testuser1", user.Username);
         Assert.Equal("testuser1@example.com", user.Email);
-        Assert.Equal("admin", user.Role);
+        Assert.Equal(UserRole.admin, user.Role);
         _service.DeleteUser(id);
     }
 

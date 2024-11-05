@@ -1,13 +1,13 @@
 ﻿namespace BusinessLayer.Services
 {
-    using System;
-    using System.Threading.Tasks;
     using BusinessLayer.DTOs;
     using BusinessLayer.Interfaces;
     using DataAcessLayer.Context;
-	using DataAcessLayer.Entities.Users; 
+    using DataAcessLayer.Entities.Users;
     using Microsoft.EntityFrameworkCore;
     using Npgsql;
+    using System;
+    using System.Threading.Tasks;
 
 
 
@@ -43,7 +43,7 @@
                 Username = registrationDto.Username,
                 PasswordHash = passwordHash,
                 CreatedAt = DateTime.UtcNow,
-                Role = "User"
+                Role = UserRole.user
             };
 
             // Add user to the database
@@ -111,7 +111,9 @@
             // Update fields
             user.Email = updateDto.Email ?? user.Email;
             user.Username = updateDto.Username ?? user.Username;
-            // Update other fields as necessary
+
+            // Ensure CreatedAt is in UTC
+            user.CreatedAt = DateTime.SpecifyKind(user.CreatedAt, DateTimeKind.Utc);
 
             _context.Users.Update(user);
             await _context.SaveChangesAsync();
