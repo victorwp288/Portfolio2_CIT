@@ -10,7 +10,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Configure Entity Framework Core to use PostgreSQL as the database provider
 builder.Services.AddDbContext<ImdbContext>(options =>
-    options.UseNpgsql("host=localhost;db=imdb;uid=postgres;pwd=Poncho24"));
+    options.UseNpgsql("host=localhost;db=imdb;uid=postgres;pwd=Ferieland128"));
 
 // Register IDataService with its implementation, DataService, using scoped lifetime
 builder.Services.AddScoped<IDataService, DataService>();

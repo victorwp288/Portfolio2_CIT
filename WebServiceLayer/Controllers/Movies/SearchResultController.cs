@@ -31,7 +31,7 @@ namespace WebServiceLayer.Controllers.Movies;
         }
 
            // GET method to retrieve a list of movies based on search result
-        [HttpGet("{search}", Name = nameof(SearchAsync))]
+       /* [HttpGet("{search}", Name = nameof(SearchAsync))]
         public IActionResult SearchAsync(string search)
         {
             // Retrieve a list of movies for the specified search, converting each to SearchResultModel
@@ -56,6 +56,6 @@ namespace WebServiceLayer.Controllers.Movies;
             model.Url = GetUrl(nameof(SearchAsync), new { searchresult.Name });
 
             return model;
-        }
+        }*/
 
     }
