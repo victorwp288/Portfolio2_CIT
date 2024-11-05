@@ -99,5 +99,13 @@ public class UserController : BaseController
         return Ok();
     }
 
+    //delete a bookmark
+    [HttpDelete("{userId}/{tconst}")]
+    public async Task<IActionResult> DeleteBookmark(int userId, string tconst)
+    {
+        await _bookmarkService.DeleteBookmarkAsync(userId, tconst); 
+        return Ok();
+    }
+
 
 }

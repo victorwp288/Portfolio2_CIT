@@ -99,4 +99,17 @@ namespace BuisnessLayer.Services;
         // Save changes
         await _context.SaveChangesAsync();
     }*/
+
+    public async Task DeleteBookmarkAsync(int userId, string tconst)
+    {
+        //var user = await _context.UserBookmarks.FindAsync(userId);
+        var title = await _context.UserBookmarks.FindAsync(userId, tconst);
+        //if (user == null)
+            //throw new KeyNotFoundException("User not found.");
+        if (title == null)
+            throw new KeyNotFoundException("Title not found.");
+
+        _context.UserBookmarks.Remove(title);
+        await _context.SaveChangesAsync();
+    }
 }
