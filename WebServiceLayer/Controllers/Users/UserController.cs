@@ -131,17 +131,6 @@ public class UserController : BaseController
         return new JwtSecurityTokenHandler().WriteToken(token);
     }
 
-    //creating a new user
-    [HttpPost]
-    public async Task<IActionResult> CreateUser(UserRegistrationDTO model)
-    {
-        if (!ModelState.IsValid)
-            return BadRequest(ModelState);
-
-        var user = await _userService.RegisterUserAsync(model);
-        return Ok(model);
-    }
-
     //get user by id
     [HttpGet("{userId}", Name = nameof(GetUserByIdAsync))]
     public async Task<IActionResult> GetUserByIdAsync(int userId)
