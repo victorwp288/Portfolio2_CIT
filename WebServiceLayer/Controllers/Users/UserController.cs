@@ -59,7 +59,7 @@ public class UserController : BaseController
     }
 
  [HttpPost("login")]
-    public IActionResult Login([FromBody] LoginModel model)
+    public IActionResult Login([FromBody] UserLoginModel model)
     {
         try
         {
