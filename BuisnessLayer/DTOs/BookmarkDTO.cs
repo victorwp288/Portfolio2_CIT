@@ -8,8 +8,8 @@ namespace BuisnessLayer.DTOs
 {
     public class BookmarkDTO
     {
-        public int UserId { get; set; }
-        public string TConst { get; set; }
+        //public int UserId { get; set; }
+        //public string TConst { get; set; }
         public string? Note { get; set; }
         public DateTime BookmarkDate { get; set; }
     }

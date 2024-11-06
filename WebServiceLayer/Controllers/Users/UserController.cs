@@ -63,8 +63,8 @@ public class UserController : BaseController
         return model;
     }
 
-    //creating a new user
-    [HttpPost]
+    //register a new user
+    [HttpPost("register")]
     public async Task<IActionResult> CreateUser(UserRegistrationDTO model)
     {
         if (!ModelState.IsValid)
@@ -75,7 +75,7 @@ public class UserController : BaseController
     }
 
     //update user
-    [HttpPut("{userId}")]
+    [HttpPut("{userId}/update")]
     public async Task<IActionResult> UpdateUser(int userId, UserUpdateDTO model)
     {
         if (!ModelState.IsValid)
@@ -87,25 +87,24 @@ public class UserController : BaseController
     }
 
     //delete user
-    [HttpDelete("{userId}")]
+    [HttpDelete("{userId}/delete")]
     public async Task<IActionResult> DeleteUser(int userId)
     {
         await _userService.DeleteUserAsync(userId);
         return Ok();
     }
 
-    [HttpPost("{userId}/{tconst}")]
-    
+    [HttpPost("{userId}/{tconst}/bookmark")] 
     //create a bookmark
-    public async Task<IActionResult> CreateBookmark(CreateBookmarkModel model)
+    public async Task<IActionResult> CreateBookmark(int userId, string tconst, CreateBookmarkModel model)
     {
         var DTO = model.Adapt<BookmarkDTO>();
-        await _bookmarkService.CreateBookmarkAsync(DTO);
+        await _bookmarkService.CreateBookmarkAsync(userId, tconst, DTO);
         return Ok();
     }
 
     //delete a bookmark
-    [HttpDelete("{userId}/{tconst}")]
+    [HttpDelete("{userId}/{tconst}/bookmark")]
     public async Task<IActionResult> DeleteBookmark(int userId, string tconst)
     {
         await _bookmarkService.DeleteBookmarkAsync(userId, tconst); 

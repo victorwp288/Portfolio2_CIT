@@ -11,7 +11,7 @@ namespace BuisnessLayer.Interfaces;
 
 public interface IBookmarkService
 {
-    Task CreateBookmarkAsync(BookmarkDTO bookmarkDto);
+    Task CreateBookmarkAsync(int userId, string tconst, BookmarkDTO bookmarkDto);
 
     Task<IEnumerable<BookmarkDTO>> GetUserBookmarksAsync(int userId);
 

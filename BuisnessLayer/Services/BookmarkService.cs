@@ -23,21 +23,21 @@ namespace BuisnessLayer.Services;
             _context = context;
         }
 
-        public async Task CreateBookmarkAsync(BookmarkDTO bookmarkDto)
+        public async Task CreateBookmarkAsync(int userId, string tconst, BookmarkDTO bookmarkDto)
     {
         // Check if the user exists
-        var user = await _context.Users.FindAsync(bookmarkDto.UserId);
+        var user = await _context.Users.FindAsync(userId);
         if (user == null)
             throw new KeyNotFoundException("User not found.");
 
         // Check if the title exists
-        var title = await _context.TitleBasics.FindAsync(bookmarkDto.TConst);
+        var title = await _context.TitleBasics.FindAsync(tconst);
         if (title == null)
             throw new KeyNotFoundException("Title not found.");
 
         // Check if the user has already bookmarked this title
         var existingBookmark = await _context.UserBookmarks
-            .SingleOrDefaultAsync(r => r.UserId == bookmarkDto.UserId && r.Tconst == bookmarkDto.TConst);
+            .SingleOrDefaultAsync(r => r.UserId == userId && r.Tconst == tconst);
 
         if (existingBookmark != null)
         {
@@ -50,8 +50,8 @@ namespace BuisnessLayer.Services;
             // Add new bookmark
             var userBookmark = new UserBookmark
             {
-                UserId = bookmarkDto.UserId,
-                Tconst = bookmarkDto.TConst,
+                UserId = userId,
+                Tconst = tconst,
                 Note = bookmarkDto.Note,
                 BookmarkDate = bookmarkDto.BookmarkDate
             };
@@ -84,8 +84,6 @@ namespace BuisnessLayer.Services;
 
         return bookmarks.Select(b => new BookmarkDTO
         {
-            UserId = b.UserId,
-            TConst = b.Tconst,
             Note = b.Note,
             BookmarkDate = b.BookmarkDate
         });
