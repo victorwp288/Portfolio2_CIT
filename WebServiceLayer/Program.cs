@@ -13,7 +13,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Npgsql;
 using System.Text;
-
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 // Enable unmapped types globally
 NpgsqlConnection.GlobalTypeMapper.MapEnum<UserRole>("user_role");
 
@@ -21,7 +23,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Configure Entity Framework Core to use PostgreSQL as the database provider
 builder.Services.AddDbContext<ImdbContext>(options =>
-    options.UseNpgsql("host=localhost;db=imdb;uid=postgres;pwd=Ferieland128"));
+    options.UseNpgsql("host=localhost;db=imdb;uid=postgres;pwd=Hejmed12!"));
 
 // Register IDataService with its implementation, DataService, using scoped lifetime
 builder.Services.AddScoped<IDataService, DataService>();
@@ -35,7 +37,7 @@ builder.Services.AddScoped<IRatingService, RatingService>();
 builder.Services.AddScoped<IBookmarkService, BookmarkService>();
 
 // Get the connection string from ImdbContext
-var connectionString = "host=localhost;db=imdb;uid=postgres;pwd=Ferieland128";
+var connectionString = "host=localhost;db=imdb;uid=postgres;pwd=Hejmed12!";
 
 // Register repositories
 builder.Services.AddScoped<IMovieSearchRepository, MovieSearchRepository>();
@@ -54,28 +56,23 @@ builder.Services.AddSwaggerGen();
 
 Console.WriteLine(builder.Configuration["Jwt:Key"]);
 
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
-{
-    options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
-
+// Configure JWT Authentication
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
     {
-
-        ValidateIssuer = false,
-
-        ValidateAudience = false,
-
-        ValidateLifetime = true,
-
-        ValidateIssuerSigningKey = true,
-
-        //ValidIssuer = builder.Configuration["Jwt: Issuer"],
-
-        //ValidAudience = builder.Configuration["Jwt: Audience"],
-
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"])),
-        ClockSkew = TimeSpan.Zero,
-    };
-});
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = builder.Configuration["Jwt:Issuer"],
+            ValidAudience = builder.Configuration["Jwt:Audience"],
+            IssuerSigningKey = new SymmetricSecurityKey(
+                Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"])),
+            ClockSkew = TimeSpan.Zero
+        };
+    });
 
 var app = builder.Build();
 
@@ -88,10 +85,8 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+// Authentication must come before Authorization
 app.UseAuthentication();
-
-app.UseAuthorization();
-
 app.UseAuthorization();
 
 app.MapControllers();

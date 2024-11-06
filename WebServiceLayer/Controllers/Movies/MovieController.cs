@@ -5,7 +5,7 @@ using DataAcessLayer.Entities.Movies;
 using Mapster;
 using Microsoft.AspNetCore.Mvc;
 using WebServiceLayer.Models.Movies;
-
+using Microsoft.AspNetCore.Authorization;
 
 
 namespace WebServiceLayer.Controllers.Movies
