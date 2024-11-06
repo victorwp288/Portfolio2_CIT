@@ -19,17 +19,22 @@ public class UserController : BaseController
 {
     IBookmarkService _bookmarkService;
     IUserService _userService;
+
+	ISearchService _searchService;
     private readonly LinkGenerator _linkGenerator;
 
     public UserController(
         IUserService userService,
         IBookmarkService bookmarkService,
+		ISearchService searchService, 
         LinkGenerator linkGenerator)
         : base(linkGenerator)
     {
         _bookmarkService = bookmarkService;
         _userService = userService;
         _linkGenerator = linkGenerator;
+		_searchService = searchService;
+
     }
 
     [HttpGet("{userId}", Name = nameof(GetUserByIdAsync))]
@@ -107,5 +112,12 @@ public class UserController : BaseController
         return Ok();
     }
 
+    // Delete user search history
+    [HttpDelete("{userId}/search-history")]
+    public async Task<IActionResult> DeleteSearchHistory(int userId)
+    {
+        await _searchService.DeleteUserSearchHistoryAsync(userId);
+        return Ok();
+    }
 
 }

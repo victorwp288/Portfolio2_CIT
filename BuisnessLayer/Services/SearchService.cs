@@ -122,5 +122,11 @@
             var combinedResults = titleResults.Concat(personResults).ToList();
             return combinedResults;
         }
+			public async Task DeleteUserSearchHistoryAsync(int userId)
+			{
+				await _context.UserSearchHistories
+					.Where(h => h.UserId == userId)
+					.ExecuteDeleteAsync();
+			}
     }
 }

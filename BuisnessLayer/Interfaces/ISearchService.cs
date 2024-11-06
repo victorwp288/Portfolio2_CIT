@@ -12,5 +12,6 @@
         Task<IEnumerable<SearchResultDTO>> SearchPersonNameAsync(string query);
         Task<IEnumerable<SearchResultDTO>> SearchTitleAsync(string query, int userId);
         Task<IEnumerable<SearchResultDTO>> SearchTitleByDatabaseAsync(string query, int userId);
-    }
+		Task DeleteUserSearchHistoryAsync(int userId);
+}
 }
