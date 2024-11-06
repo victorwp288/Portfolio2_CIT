@@ -1,6 +1,6 @@
 ﻿namespace WebServiceLayer.Models.Users
 {
-    public class CreateUser
+    public class CreateUserModel
     {
         public string Username { get; set; }
         public string Password { get; set; }
