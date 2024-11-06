@@ -26,7 +26,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace WebServiceLayer.Controllers.Users;
 
-// Attribute indicating this class is an API controller, and setting the base route to "api/movies"
+// Attribute indicating this class is an API controller, and setting the base route to "api/users"
 [ApiController]
 [Route("api/users")]
 public class UserController : BaseController
