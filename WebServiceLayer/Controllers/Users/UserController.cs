@@ -36,6 +36,7 @@ public class UserController : BaseController
 
     }
 
+    //get user by id
     [HttpGet("{userId}", Name = nameof(GetUserByIdAsync))]
     public async Task<IActionResult> GetUserByIdAsync(int userId)
     {
@@ -50,38 +51,33 @@ public class UserController : BaseController
         return Ok(model);
     }
 
-    //map the user entity to the user model
-    private UserModel CreateUserModel([FromBody] UserDTO user)
-    {
-        // Map TitleBasic entity properties to MovieModel properties
-        var model = user.Adapt<UserModel>();
-
-        // Generate URL for accessing details of the current movie and add to the model
-        model.Url = GetUrl(nameof(GetUserByIdAsync), new { user.UserId });
-
-        return model;
-    }
-
     //register a new user
     [HttpPost("register")]
-    public async Task<IActionResult> CreateUser(UserRegistrationDTO model)
+    public async Task<IActionResult> CreateUser(CreateUserRegistrationModel model)
     {
-        if (!ModelState.IsValid)
-            return BadRequest(ModelState);
 
-        var user = await _userService.RegisterUserAsync(model);
+        var dto = new UserRegistrationDTO
+        {
+            Email = model.Email,
+            Username = model.Username,
+            Password = model.Password
+        };
+        var user = await _userService.RegisterUserAsync(dto);
         return Ok(model);
     }
 
     //update user
     [HttpPut("{userId}/update")]
-    public async Task<IActionResult> UpdateUser(int userId, UserUpdateDTO model)
+    public async Task<IActionResult> UpdateUser(int userId, UserUpdateModel model)
     {
-        if (!ModelState.IsValid)
-            return BadRequest(ModelState);
-
-        model.UserId = userId;
-        await _userService.UpdateUserAsync(model);
+        var dto = new UserUpdateDTO
+        {
+            UserId= userId,
+            Email = model.Email,
+            Username = model.Username,
+            Password = model.Password
+        };
+        await _userService.UpdateUserAsync(dto);
         return Ok();
     }
 
@@ -125,4 +121,15 @@ public class UserController : BaseController
         return Ok();
     }
 
+    //helper method to map the user entity to the user model
+    private UserModel CreateUserModel([FromBody] UserDTO user)
+    {
+        // Map TitleBasic entity properties to MovieModel properties
+        var model = user.Adapt<UserModel>();
+
+        // Generate URL for accessing details of the current movie and add to the model
+        model.Url = GetUrl(nameof(GetUserByIdAsync), new { user.UserId });
+
+        return model;
+    }
 }

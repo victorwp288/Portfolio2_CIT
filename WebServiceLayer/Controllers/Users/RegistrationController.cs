@@ -36,10 +36,10 @@ public class RegistrationController : BaseController
         var user = await _userService.RegisterUserAsync(dto);
         return Ok(model);
     }
+
     [HttpGet]
     public int UserLogin(UserLoginModel model)
     {
-
         return _dataService.FunctionRegisterUser(model.UserName, model.Email, model.Password);
     }
 }

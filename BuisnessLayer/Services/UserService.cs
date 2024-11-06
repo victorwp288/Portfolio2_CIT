@@ -26,7 +26,8 @@
         public async Task<UserDTO> RegisterUserAsync(UserRegistrationDTO registrationDto)
         {
             try
-            {
+            {              
+                
                 await _userRepository.RegisterUserAsync(
                     registrationDto.Username,
                     registrationDto.Email,
@@ -100,6 +101,7 @@
             // Update fields
             user.Email = updateDto.Email ?? user.Email;
             user.Username = updateDto.Username ?? user.Username;
+            //user.Password = updateDto.Password ?? user.Password;
 
             // Ensure CreatedAt is in UTC
             user.CreatedAt = DateTime.SpecifyKind(user.CreatedAt, DateTimeKind.Utc);
@@ -119,7 +121,7 @@
         }
 
         // Helper methods for password hashing
-        private string HashPassword(string password)
+        private async Task<string> HashPassword(string password)
         {
             using var connection = (NpgsqlConnection)_context.Database.GetDbConnection();
             connection.Open();
@@ -128,6 +130,7 @@
             return (string)command.ExecuteScalar();
         }
 
+        // Helper method for password verification
         private bool VerifyPassword(string password, string passwordHash)
         {
             using var connection = (NpgsqlConnection)_context.Database.GetDbConnection();

@@ -5,10 +5,10 @@ using WebServiceLayer.Models.Movies;
 using BusinessLayer.Interfaces;
 
 
-namespace WebServiceLayer.Controllers.Movies;
+namespace WebServiceLayer.Controllers.Users;
 
 [ApiController]
-[Route("api/ratings")]
+[Route("api/users")]
 public class UserRatingController : BaseController
 {
     private readonly IRatingService _ratingService;
@@ -23,24 +23,26 @@ public class UserRatingController : BaseController
         _linkGenerator = linkGenerator;
     }
 
-    [HttpPost]
-    public async Task<IActionResult> CreateRating(CreateRatingModel model)
+    //create user rating
+    [HttpPost("{userId}/{tconst}/rating/create")]
+    public async Task<IActionResult> CreateRating(int userId, string tconst, CreateRatingModel model)
     {
         var ratingDto = new UserRatingDTO
         {
-            UserId = model.UserId,
-            TConst = model.TConst,
+            UserId = userId,
+            TConst = tconst,
             Rating = model.Rating,
             Review = model.Review,
             ReviewDate = DateTime.UtcNow
         };
 
         await _ratingService.SubmitUserRatingAsync(ratingDto);
-        
+
         return Ok(CreateRatingModel(ratingDto));
     }
 
-    [HttpGet("{userId}/{tconst}", Name = nameof(GetUserRatingAsync))]
+    //get user rating for tconst
+    [HttpGet("{userId}/{tconst}/rating", Name = nameof(GetUserRatingAsync))]
     public async Task<IActionResult> GetUserRatingAsync(int userId, string tconst)
     {
         var rating = await _ratingService.GetUserRatingAsync(userId, tconst);
@@ -54,7 +56,8 @@ public class UserRatingController : BaseController
         return Ok(model);
     }
 
-    [HttpGet("user/{userId}")]
+    //get all user ratings
+    [HttpGet("{userId}/rating")]
     public async Task<IActionResult> GetUserRatingsAsync(int userId)
     {
         var ratings = await _ratingService.GetUserRatingsAsync(userId);
@@ -68,15 +71,8 @@ public class UserRatingController : BaseController
         return Ok(models);
     }
 
-    private UserRating CreateRatingModel(UserRatingDTO rating)
-    {
-        var model = rating.Adapt<UserRating>();
-        model.Url = GetUrl(nameof(GetUserRatingAsync),
-            new { userId = rating.UserId, tconst = rating.TConst });
-        return model;
-    }
-
-    [HttpPut("{userId}/{tconst}")]
+    //update user rating
+    [HttpPut("{userId}/{tconst}/rating/update")]
     public async Task<IActionResult> UpdateUserRatingAsync(int userId, string tconst, UpdateRatingModel model)
     {
         var rating = await _ratingService.GetUserRatingAsync(userId, tconst);
@@ -85,5 +81,14 @@ public class UserRatingController : BaseController
         rating.Review = model.Review;
 
         return Ok(rating);
+    }
+
+    //helper method to create rating model from rating DTO
+    private UserRating CreateRatingModel(UserRatingDTO rating)
+    {
+        var model = rating.Adapt<UserRating>();
+        model.Url = GetUrl(nameof(GetUserRatingAsync),
+            new { userId = rating.UserId, tconst = rating.TConst });
+        return model;
     }
 }

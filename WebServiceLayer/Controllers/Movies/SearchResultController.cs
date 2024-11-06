@@ -37,6 +37,7 @@ public class SearchResultController : BaseController
         return Ok(searchResults?.Select(x => SearchResultModel(x)));
     }
 
+    // GET method to retrieve a list of movies based on search result
     [HttpGet("search/titles/{query}", Name = nameof(SearchTitlesAsync))]
     public async Task<IActionResult> SearchTitlesAsync(string query)
     {
@@ -44,6 +45,7 @@ public class SearchResultController : BaseController
         return Ok(searchResults.Select(SearchResultModel));
     }
 
+    // GET method to retrieve a list of movies based on search result
     [HttpGet("search/titles/database/{query}", Name = nameof(SearchTitlesByDatabaseAsync))]
     public async Task<IActionResult> SearchTitlesByDatabaseAsync(string query)
     {
@@ -51,6 +53,7 @@ public class SearchResultController : BaseController
         return Ok(searchResults.Select(SearchResultModel));
     }
 
+    // GET method to retrieve a list of movies based on search result
     [HttpGet("search/persons/{query}", Name = nameof(SearchPersonsAsync))]
     public async Task<IActionResult> SearchPersonsAsync(string query)
     {
@@ -58,6 +61,7 @@ public class SearchResultController : BaseController
         return Ok(searchResults.Select(SearchResultModel));
     }
 
+    // GET method to retrieve a list of movies based on search result
     [HttpGet("search/titles/{query}/{userId}", Name = nameof(SearchTitlesWithHistoryAsync))]
     public async Task<IActionResult> SearchTitlesWithHistoryAsync(string query, int userId)
     {
@@ -65,6 +69,7 @@ public class SearchResultController : BaseController
         return Ok(searchResults.Select(SearchResultModel));
     }
 
+    // GET method to retrieve a list of movies based on search result
     [HttpGet("search/titles/database/{query}/{userId}", Name = nameof(SearchTitlesByDatabaseWithHistoryAsync))]
     public async Task<IActionResult> SearchTitlesByDatabaseWithHistoryAsync(string query, int userId)
     {
@@ -72,6 +77,7 @@ public class SearchResultController : BaseController
         return Ok(searchResults.Select(SearchResultModel));
     }
 
+    // helper method to create a SearchResultModel from a SearchResultDTO entity
     private SearchResultModel SearchResultModel(SearchResultDTO searchresult)
     {
         // If the title is null, return null (avoiding null reference exceptions)

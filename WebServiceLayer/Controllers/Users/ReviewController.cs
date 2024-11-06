@@ -20,6 +20,7 @@ namespace WebServiceLayer.Controllers.Users
             _linkGenerator = linkGenerator;
             _ratingService = ratingService;
         }
+
         [HttpGet("{id,tconst}", Name = nameof(GetReview))]
         public async Task<IActionResult> GetReview(int id, string tconst)
         {
