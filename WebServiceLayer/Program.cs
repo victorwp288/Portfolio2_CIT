@@ -32,7 +32,7 @@ builder.Services.AddScoped<IRatingService, RatingService>();
 builder.Services.AddScoped<IBookmarkService, BookmarkService>();
 
 // Get the connection string from ImdbContext
-var connectionString = "host=localhost;db=imdb;uid=postgres;pwd=Ferieland128!";
+var connectionString = "host=localhost;db=imdb;uid=postgres;pwd=Ferieland128";
 
 // Register repositories
 builder.Services.AddScoped<IMovieSearchRepository, MovieSearchRepository>();

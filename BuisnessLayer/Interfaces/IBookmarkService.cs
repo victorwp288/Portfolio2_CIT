@@ -13,5 +13,7 @@ public interface IBookmarkService
 {
     Task CreateBookmarkAsync(BookmarkDTO bookmarkDto);
 
+    Task<IEnumerable<BookmarkDTO>> GetUserBookmarksAsync(int userId);
+
     Task DeleteBookmarkAsync(int userId, string tconst);
 }

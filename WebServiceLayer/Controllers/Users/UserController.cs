@@ -112,6 +112,14 @@ public class UserController : BaseController
         return Ok();
     }
 
+    [HttpGet("{userId}/bookmarks")]
+    public async Task<IActionResult> GetUserBookmarks(int userId)
+    {
+        var bookmarks = await _bookmarkService.GetUserBookmarksAsync(userId);
+        var model = bookmarks.Adapt<IEnumerable<CreateBookmarkModel>>();
+        return Ok(model);
+    }
+
     // Delete user search history
     [HttpDelete("{userId}/search-history")]
     public async Task<IActionResult> DeleteSearchHistory(int userId)

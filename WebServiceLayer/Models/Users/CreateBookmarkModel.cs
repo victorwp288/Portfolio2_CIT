@@ -2,8 +2,8 @@
 {
     public class CreateBookmarkModel
     {
-        public int UserId { get; set; }
-        public string TConst { get; set; }
+        //public int UserId { get; set; }
+        //public string TConst { get; set; }
 
         public string Note { get; set; }
 

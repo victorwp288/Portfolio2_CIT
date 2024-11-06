@@ -293,13 +293,13 @@ public class ImdbContext : DbContext
 
         // Add this configuration for UserBookmark
         modelBuilder.Entity<UserBookmark>()
-            .HasOne(ur => ur.TitleBasic)
+            .HasOne(ub => ub.TitleBasic)
             .WithMany()
-            .HasForeignKey(ur => ur.Tconst);
+            .HasForeignKey(ub => ub.Tconst);
 
         modelBuilder.Entity<UserBookmark>()
-            .HasOne(ur => ur.User)
+            .HasOne(ub => ub.User)
             .WithMany()
-            .HasForeignKey(ur => ur.UserId);
+            .HasForeignKey(ub => ub.UserId);
     }
 }

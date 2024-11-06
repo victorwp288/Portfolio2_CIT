@@ -1,5 +1,6 @@
 ﻿using BuisnessLayer.DTOs;
 using BuisnessLayer.Interfaces;
+using BusinessLayer.DTOs;
 using DataAcessLayer.Context;
 using DataAcessLayer.Entities.Movies;
 using DataAcessLayer.Entities.Users;
@@ -59,46 +60,8 @@ namespace BuisnessLayer.Services;
 
         // Save changes
         await _context.SaveChangesAsync();
-
-        // Update the TitleRating
-        //await UpdateBookmarkAsync(bookmarkDto.TConst);
     }
 
-    /*private async Task UpdateBookmarkAsync(string tconst)
-    {
-        // Calculate the new average rating and number of votes
-        var bookmark = await _context.UserBookmarks
-            .Where(r => r.Tconst == tconst)
-            .ToListAsync();
-
-        var averageRating = ratings.Average(r => r.Rating);
-        var numVotes = ratings.Count;
-
-        // Check if a TitleRating exists
-        var titleRating = await _context.TitleRatings.FindAsync(tconst);
-
-        if (titleRating != null)
-        {
-            // Update existing TitleRating
-            titleRating.AverageRating = (decimal)averageRating;
-            titleRating.NumVotes = numVotes;
-            _context.TitleRatings.Update(titleRating);
-        }
-        else
-        {
-            // Create new TitleRating
-            titleRating = new TitleRating
-            {
-                Tconst = tconst,
-                AverageRating = (decimal)averageRating,
-                NumVotes = numVotes
-            };
-            _context.TitleRatings.Add(titleRating);
-        }
-
-        // Save changes
-        await _context.SaveChangesAsync();
-    }*/
 
     public async Task DeleteBookmarkAsync(int userId, string tconst)
     {
@@ -111,5 +74,20 @@ namespace BuisnessLayer.Services;
 
         _context.UserBookmarks.Remove(title);
         await _context.SaveChangesAsync();
+    }
+
+    public async Task<IEnumerable<BookmarkDTO>> GetUserBookmarksAsync(int userId)
+    {
+        var bookmarks = await _context.UserBookmarks
+            .Where(r => r.UserId == userId)
+            .ToListAsync();
+
+        return bookmarks.Select(b => new BookmarkDTO
+        {
+            UserId = b.UserId,
+            TConst = b.Tconst,
+            Note = b.Note,
+            BookmarkDate = b.BookmarkDate
+        });
     }
 }
