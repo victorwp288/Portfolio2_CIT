@@ -58,7 +58,9 @@ public class UserController : BaseController
         _context = context;
     }
 
- [HttpPost("login")]
+
+    // Login method
+    [HttpPost("login")]
     public IActionResult Login([FromBody] UserLoginModel model)
     {
         try
@@ -103,34 +105,7 @@ public class UserController : BaseController
             return StatusCode(500, new { message = "An error occurred during login" });
         }
     }
-
-    private string GenerateJwtToken(DataAcessLayer.Entities.Users.User user)
-    {
-        var claims = new[]
-        {
-            new Claim(JwtRegisteredClaimNames.Sub, user.UserId.ToString()),
-            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-            new Claim(ClaimTypes.Name, user.Username),
-            new Claim(ClaimTypes.Role, user.Role.ToString())
-        };
-
-        var key = new SymmetricSecurityKey(
-            Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
-
-        var credentials = new SigningCredentials(
-            key, SecurityAlgorithms.HmacSha512Signature);
-
-        var token = new JwtSecurityToken(
-            issuer: _configuration["Jwt:Issuer"],
-            audience: _configuration["Jwt:Audience"],
-            claims: claims,
-            expires: DateTime.UtcNow.AddHours(1),
-            signingCredentials: credentials
-        );
-
-        return new JwtSecurityTokenHandler().WriteToken(token);
-    }
-
+    
     //get user by id
     [HttpGet("{userId}", Name = nameof(GetUserByIdAsync))]
     public async Task<IActionResult> GetUserByIdAsync(int userId)
@@ -227,13 +202,32 @@ public class UserController : BaseController
 
         return model;
     }
-}
 
-public class LoginModel
-{
-    [Required]
-    public string UserName { get; set; }
+    //helper method to generate JWT token
+    private string GenerateJwtToken(DataAcessLayer.Entities.Users.User user)
+    {
+        var claims = new[]
+        {
+            new Claim(JwtRegisteredClaimNames.Sub, user.UserId.ToString()),
+            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+            new Claim(ClaimTypes.Name, user.Username),
+            new Claim(ClaimTypes.Role, user.Role.ToString())
+        };
 
-    [Required]
-    public string Password { get; set; }
+        var key = new SymmetricSecurityKey(
+            Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
+
+        var credentials = new SigningCredentials(
+            key, SecurityAlgorithms.HmacSha512Signature);
+
+        var token = new JwtSecurityToken(
+            issuer: _configuration["Jwt:Issuer"],
+            audience: _configuration["Jwt:Audience"],
+            claims: claims,
+            expires: DateTime.UtcNow.AddHours(1),
+            signingCredentials: credentials
+        );
+
+        return new JwtSecurityTokenHandler().WriteToken(token);
+    }
 }
