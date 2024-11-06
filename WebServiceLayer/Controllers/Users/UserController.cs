@@ -19,7 +19,6 @@ public class UserController : BaseController
 {
     IBookmarkService _bookmarkService;
     IUserService _userService;
-
 	ISearchService _searchService;
     private readonly LinkGenerator _linkGenerator;
 
@@ -94,8 +93,7 @@ public class UserController : BaseController
         return Ok();
     }
 
-    [HttpPost("{userId}/{tconst}/bookmark")] 
-    //create a bookmark
+    [HttpPost("{userId}/{tconst}/bookmark")]
     public async Task<IActionResult> CreateBookmark(int userId, string tconst, CreateBookmarkModel model)
     {
         var DTO = model.Adapt<BookmarkDTO>();
