@@ -9,6 +9,15 @@ using DataAccessLayer.Repositories.Implementations;
 using DataAcessLayer.Repositories.Interfaces;
 using BuisnessLayer.Interfaces;
 using BuisnessLayer.DTOs;
+using DataAcessLayer.Repositories.Implementations;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Text;
+using System.Security.Claims;
 
 namespace WebServiceLayer.Controllers.Users;
 
@@ -17,23 +26,77 @@ namespace WebServiceLayer.Controllers.Users;
 [Route("api/users")]
 public class UserController : BaseController
 {
+    private readonly IConfiguration _configuration;
+    IDataService _dataService;
     IBookmarkService _bookmarkService;
     IUserService _userService;
 	ISearchService _searchService;
     private readonly LinkGenerator _linkGenerator;
 
     public UserController(
+        IConfiguration configuration,
+        IDataService dataService,
         IUserService userService,
         IBookmarkService bookmarkService,
 		ISearchService searchService, 
         LinkGenerator linkGenerator)
         : base(linkGenerator)
     {
+        _configuration = configuration;
+        _dataService = dataService;
         _bookmarkService = bookmarkService;
         _userService = userService;
         _linkGenerator = linkGenerator;
 		_searchService = searchService;
 
+    }
+
+    //login user
+    [HttpPost("login")] // Use HttpPost for login (sending data)
+    public IActionResult UserLogin(UserLoginModel model)
+    {
+        // Validate user input
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState); // Return validation errors
+        }
+
+        // Authenticate user
+        var userId = _dataService.FunctionLoginUser(model.UserName, model.Password);
+
+        // Handle authentication result
+        if (userId) // Assuming userId is non-zero on successful login
+        {
+            // Create JWT token
+            var claims = new[]
+            {
+            new Claim(JwtRegisteredClaimNames.Sub, _configuration["Jwt:Subject"]),
+            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+            new Claim("UserId", model.UserName.ToString()) // Use "UserId" for consistency
+        };
+
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
+            var signIn = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature); // Correctly initialize signIn
+
+            // 2. Generate the JWT token
+            var token = new JwtSecurityToken(
+                //_configuration["Jwt:Issuer"],
+                //_configuration["Jwt:Audience"],
+                claims: claims,
+                expires: DateTime.UtcNow.AddMinutes(60),
+                signingCredentials: signIn // Use signIn here
+            );
+
+            var tokenString = new JwtSecurityTokenHandler().WriteToken(token);
+
+            // Return the token and userId
+            return Ok(new { Token = tokenString });
+        }
+        else
+        {
+            // Handle authentication failure
+            return Unauthorized(); // Return Unauthorized status code
+        }
     }
 
     //get user by id
