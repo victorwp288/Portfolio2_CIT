@@ -4,26 +4,34 @@ using BusinessLayer.Interfaces;
 using BusinessLayer.DTOs;
 using WebServiceLayer.Models.Users;
 using WebServiceLayer.Models.Movies;
-using DataAcessLayer;   
-
+using DataAcessLayer;
 namespace WebServiceLayer.Controllers.Users;
+using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Text;
+using System.Security.Claims;
 
 // Attribute indicating this class is an API controller, and setting the base route to "api/movies"
 [ApiController]
 [Route("api/users")]
 public class UserController : BaseController
 {
-
+    private readonly IConfiguration _configuration;
     IUserService _userService;
+    IDataService _dataService;
     private readonly LinkGenerator _linkGenerator;
 
     public UserController(
         IUserService userService,
+        IConfiguration configuration,
+        IDataService dataService,
         LinkGenerator linkGenerator)
         : base(linkGenerator)
     {
         _userService = userService;
         _linkGenerator = linkGenerator;
+        _configuration = configuration;
     }
 
     [HttpGet("{userId}", Name = nameof(GetUserByIdAsync))]
@@ -61,26 +69,6 @@ public class UserController : BaseController
 
         var user = await _userService.RegisterUserAsync(model);
         return Ok(model);
-    }
-
-    //update user
-    [HttpPut("{userId}")]
-    public async Task<IActionResult> UpdateUser(int userId, UserUpdateDTO model)
-    {
-        if (!ModelState.IsValid)
-            return BadRequest(ModelState);
-
-        model.UserId = userId;
-        await _userService.UpdateUserAsync(model);
-        return Ok();
-    }
-
-    //delete user
-    [HttpDelete("{userId}")]
-    public async Task<IActionResult> DeleteUser(int userId)
-    {
-        await _userService.DeleteUserAsync(userId);
-        return Ok();
     }
 
 }

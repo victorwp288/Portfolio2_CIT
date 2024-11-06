@@ -54,15 +54,15 @@ public class UserLoginController : BaseController
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 new Claim("UserId", model.UserName.ToString()) // Use "UserId" for consistency
             };
-           
+            
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
-            var signIn = new SigningCredentials(key, SecurityAlgorithms.HmacSha256); // Correctly initialize signIn
+            var signIn = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature); // Correctly initialize signIn
 
             // 2. Generate the JWT token
             var token = new JwtSecurityToken(
-                _configuration["Jwt:Issuer"],
-                _configuration["Jwt:Audience"],
-                claims,
+                //_configuration["Jwt:Issuer"],
+                //_configuration["Jwt:Audience"],
+                claims: claims,
                 expires: DateTime.UtcNow.AddMinutes(60),
                 signingCredentials: signIn // Use signIn here
             );
