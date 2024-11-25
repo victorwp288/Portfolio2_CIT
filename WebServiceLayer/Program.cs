@@ -13,9 +13,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Npgsql;
 using System.Text;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
-using System.Text;
+
+
 
 // Enable unmapped types globally
 NpgsqlConnection.GlobalTypeMapper.MapEnum<UserRole>("user_role");
@@ -24,7 +23,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Configure Entity Framework Core to use PostgreSQL as the database provider
 builder.Services.AddDbContext<ImdbContext>(options =>
-    options.UseNpgsql("host=localhost;db=imdb;uid=postgres;pwd=<InsertOwnConnenctionString>"));
+    options.UseNpgsql("host=localhost;db=imdb;uid=postgres;pwd=Hejmed12!"));
 
 // Register IDataService with its implementation, DataService, using scoped lifetime
 builder.Services.AddScoped<IDataService, DataService>();
@@ -38,7 +37,7 @@ builder.Services.AddScoped<IRatingService, RatingService>();
 builder.Services.AddScoped<IBookmarkService, BookmarkService>();
 
 // Get the connection string from ImdbContext
-var connectionString = "host=localhost;db=imdb;uid=postgres;pwd=<InsertOwnConnenctionString>";
+var connectionString = "host=localhost;db=imdb;uid=postgres;pwd=Hejmed12!";
 
 // Register repositories
 builder.Services.AddScoped<IMovieSearchRepository, MovieSearchRepository>();
@@ -75,7 +74,27 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 
+// Add this before builder.Services.AddControllers();
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll",
+        builder =>
+        {
+            builder
+                .AllowAnyOrigin()
+                .AllowAnyMethod()
+                .AllowAnyHeader();
+
+
+        });
+});
+
 var app = builder.Build();
+
+// Add this before app.UseAuthorization();
+app.UseCors("AllowAll");
+
+// ... other middleware configurations ...
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

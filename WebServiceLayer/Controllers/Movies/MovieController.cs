@@ -3,6 +3,7 @@ using BusinessLayer.Interfaces;
 using DataAcessLayer;
 using DataAcessLayer.Entities.Movies;
 using Mapster;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using WebServiceLayer.Models.Movies;
 
@@ -12,6 +13,7 @@ namespace WebServiceLayer.Controllers.Movies
     // Attribute indicating this class is an API controller, and setting the base route to "api/movies"
     [ApiController]
     [Route("api/movies")]
+    [EnableCors]
     public class MovieController : BaseController
     {
         // accessing data from the data service layer, and generating links within the controller

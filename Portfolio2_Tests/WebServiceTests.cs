@@ -3,6 +3,8 @@ using BusinessLayer.Interfaces;
 using DataAcessLayer.Context;
 using Microsoft.EntityFrameworkCore;
 using WebServiceLayer.Controllers.Users;
+using Xunit;
+
 
 namespace Portfolio2_Tests
 {
@@ -10,7 +12,6 @@ namespace Portfolio2_Tests
     {
         private readonly TestDbContext _context;
         private readonly IUserService _userService;
-        private RegistrationController _controller;
 
         public WebServiceTests()
         {
