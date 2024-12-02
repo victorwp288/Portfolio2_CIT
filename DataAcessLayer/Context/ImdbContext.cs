@@ -50,7 +50,11 @@ public class ImdbContext : DbContext
         if (!optionsBuilder.IsConfigured)
         {
             optionsBuilder.LogTo(Console.WriteLine, Microsoft.Extensions.Logging.LogLevel.Information);
+<<<<<<< HEAD
             optionsBuilder.UseNpgsql("host=localhost;db=imdb;uid=postgres;pwd=Hejmed12!");
+=======
+            optionsBuilder.UseNpgsql("host=localhost;db=imdb;uid=postgres;pwd=2409");
+>>>>>>> 528b38e4be9e528642ff01dd918b070da34f7df2
         }
     }
 

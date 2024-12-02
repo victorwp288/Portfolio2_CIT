@@ -26,6 +26,11 @@ namespace DataAcessLayer.Repositories.Implementations
             return _context.Users.Find(id);
         }
 
+        public IEnumerable<UserBookmark> GetUserBookmerksByUserId(int id)
+        {
+            return _context.UserBookmarks.Where(x => x.UserId == id);
+        }
+
         public bool FunctionLoginUser(string inputUsername, string inputPassword)
         {
             return CallFunctionReturnsBool($"SELECT login_user('{inputUsername}', '{inputPassword}')");
@@ -98,8 +103,17 @@ namespace DataAcessLayer.Repositories.Implementations
 
         public bool FunctionAddBookmark(int inputUserId, string inputMovieId, string note)
         {
-            return VoidBool($"SELECT add_bookmark({inputUserId}, '{inputMovieId}', '{note}')");
+            try
+            {
+                return VoidBool($"SELECT add_bookmark({inputUserId}, '{inputMovieId}', '{note}')");
+            }
+            catch (Exception ex)
+            {
+                // Log the exception for debugging purposes
+                Console.WriteLine($"General Exception: {ex.Message}");
+                return false;
 
+            }
         }
         public bool FunctionManageBookmark(int inputUserId, string inputMovieId, string note)
         {
@@ -123,7 +137,6 @@ namespace DataAcessLayer.Repositories.Implementations
 
         public IList<TconstAndPrimaryTitle> FunctionSearchMovies(string pSearchText)
         {
-        
             return _context.TconstAndPrimaryTitles.FromSqlInterpolated($"SELECT * from search_movies('{pSearchText}')").ToList();
         }
 
