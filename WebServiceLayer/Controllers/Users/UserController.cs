@@ -22,7 +22,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using DataAcessLayer.Context;
 using System.ComponentModel.DataAnnotations;
-
+using DataAcessLayer.Entities.Users;
+using BusinessLayer.Services;
 
 namespace WebServiceLayer.Controllers.Users;
 
@@ -35,16 +36,19 @@ public class UserController : BaseController
     IDataService _dataService;
     IBookmarkService _bookmarkService;
     IUserService _userService;
-	ISearchService _searchService;
+    ISearchService _searchService;
     private readonly ImdbContext _context;
     private readonly LinkGenerator _linkGenerator;
+    private DataService _service;
+    ITitleService _titleService;
 
     public UserController(
         IConfiguration configuration,
-        IDataService dataService,
+        ITitleService titleService,
+    IDataService dataService,
         IUserService userService,
         IBookmarkService bookmarkService,
-		ISearchService searchService, 
+        ISearchService searchService,
         LinkGenerator linkGenerator,
         ImdbContext context)
         : base(linkGenerator)
@@ -54,8 +58,9 @@ public class UserController : BaseController
         _bookmarkService = bookmarkService;
         _userService = userService;
         _linkGenerator = linkGenerator;
-		_searchService = searchService;
+        _searchService = searchService;
         _context = context;
+        _service = new DataService(_context);
     }
 
 
@@ -70,7 +75,7 @@ public class UserController : BaseController
 
             // Get user details first and log what we find
             var user = _context.Users.FirstOrDefault(u => u.Username == model.UserName);
-            
+
             if (user == null)
             {
                 Console.WriteLine("No user found with that username");
@@ -105,7 +110,7 @@ public class UserController : BaseController
             return StatusCode(500, new { message = "An error occurred during login" });
         }
     }
-    
+
     //get user by id
     [HttpGet("{userId}", Name = nameof(GetUserByIdAsync))]
     public async Task<IActionResult> GetUserByIdAsync(int userId)
@@ -142,7 +147,7 @@ public class UserController : BaseController
     {
         var dto = new UserUpdateDTO
         {
-            UserId= userId,
+            UserId = userId,
             Email = model.Email,
             Username = model.Username,
             Password = model.Password
@@ -162,8 +167,19 @@ public class UserController : BaseController
     [HttpPost("{userId}/{tconst}/bookmark")]
     public async Task<IActionResult> CreateBookmark(int userId, string tconst, CreateBookmarkModel model)
     {
-        var DTO = model.Adapt<BookmarkDTO>();
-        await _bookmarkService.CreateBookmarkAsync(userId, tconst, DTO);
+        //var DTO = model.Adapt<BookmarkDTO>();
+
+        //var validUser = await _userService.GetUserByIdAsync(userId);
+        //var validTconst = await _titleService.GetTitleByIdAsync(tconst);
+
+
+        //await _bookmarkService.CreateBookmarkAsync(userId, tconst, DTO);
+        var result = _service.FunctionAddBookmark(userId, tconst, "n/a");
+
+        if (!result)//|| validTconst == null)
+        {
+            return NotFound();
+        }
         return Ok();
     }
 
@@ -171,14 +187,15 @@ public class UserController : BaseController
     [HttpDelete("{userId}/{tconst}/bookmark")]
     public async Task<IActionResult> DeleteBookmark(int userId, string tconst)
     {
-        await _bookmarkService.DeleteBookmarkAsync(userId, tconst); 
+        await _bookmarkService.DeleteBookmarkAsync(userId, tconst);
         return Ok();
     }
 
     [HttpGet("{userId}/bookmarks")]
     public async Task<IActionResult> GetUserBookmarks(int userId)
     {
-        var bookmarks = await _bookmarkService.GetUserBookmarksAsync(userId);
+        var bookmarks = _service.GetUserBookmerksByUserId(userId);
+        Console.WriteLine(bookmarks.First().Tconst);
         var model = bookmarks.Adapt<IEnumerable<CreateBookmarkModel>>();
         return Ok(model);
     }
