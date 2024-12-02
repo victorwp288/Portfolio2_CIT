@@ -123,6 +123,7 @@ namespace DataAcessLayer.Repositories.Implementations
 
         public IList<TconstAndPrimaryTitle> FunctionSearchMovies(string pSearchText)
         {
+        
             return _context.TconstAndPrimaryTitles.FromSqlInterpolated($"SELECT * from search_movies('{pSearchText}')").ToList();
         }
 

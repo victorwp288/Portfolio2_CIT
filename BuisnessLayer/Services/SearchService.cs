@@ -28,7 +28,7 @@
         public async Task<IEnumerable<SearchResultDTO>> SearchTitleByDatabaseAsync(string query)
         {
             var titleResults = await _context.TitleBasics
-                                             .Where(t => t.PrimaryTitle.Contains(query))
+                                             .Where(t => t.PrimaryTitle.ToLower().Contains(query.ToLower()))
                                              .Select(t => new SearchResultDTO
                                              {
                                                  Id = t.Tconst,
@@ -46,7 +46,7 @@
             await _searchHistoryRepository.LogSearchAsync(userId, query);
 
             var titleResults = await _context.TitleBasics
-                                             .Where(t => t.PrimaryTitle.Contains(query))
+                                             .Where(t => t.PrimaryTitle.ToLower().Contains(query.ToLower()))
                                              .Select(t => new SearchResultDTO
                                              {
                                                  Id = t.Tconst,
@@ -85,7 +85,7 @@
         public async Task<IEnumerable<SearchResultDTO>> SearchPersonNameAsync(string query)
         {
             var personResults = await _context.NameBasics
-                                              .Where(p => p.PrimaryName.Contains(query))
+                                              .Where(p => p.PrimaryName.ToLower().Contains(query.ToLower()))
                                               .Select(p => new SearchResultDTO
                                               {
                                                   Id = p.Nconst,
@@ -100,7 +100,7 @@
         public async Task<IEnumerable<SearchResultDTO>> SearchAsync(string query)
         {
             var titleResults = await _context.TitleBasics
-                                             .Where(t => t.PrimaryTitle.Contains(query))
+                                             .Where(t => t.PrimaryTitle.ToLower().Contains(query.ToLower()))
                                              .Select(t => new SearchResultDTO
                                              {
                                                  Id = t.Tconst,
@@ -110,7 +110,7 @@
                                              .ToListAsync();
 
             var personResults = await _context.NameBasics
-                                              .Where(p => p.PrimaryName.Contains(query))
+                                              .Where(p => p.PrimaryName.ToLower().Contains(query.ToLower()))
                                               .Select(p => new SearchResultDTO
                                               {
                                                   Id = p.Nconst,

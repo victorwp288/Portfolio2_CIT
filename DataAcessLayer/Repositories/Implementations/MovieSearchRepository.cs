@@ -17,7 +17,7 @@ namespace DataAccessLayer.Repositories.Implementations
         public async Task<IEnumerable<TitleBasic>> SearchMoviesAsync(string query) // Change TitleBasics to TitleBasic
         {
             return await _context.TitleBasics
-                .Where(t => t.PrimaryTitle.Contains(query))
+                .Where(t => t.PrimaryTitle.ToLower().Contains(query.ToLower()))
                 .ToListAsync();
         }
     }
