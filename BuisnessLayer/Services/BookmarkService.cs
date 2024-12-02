@@ -84,6 +84,8 @@ namespace BuisnessLayer.Services;
 
         return bookmarks.Select(b => new BookmarkDTO
         {
+            UserId = b.UserId,
+            Tconst = b.Tconst,
             Note = b.Note,
             BookmarkDate = b.BookmarkDate
         });
