@@ -61,6 +61,7 @@ namespace BusinessLayer.Services
                 // Update existing rating
                 existingRating.Rating = ratingDto.Rating;
                 existingRating.Review = ratingDto.Review;
+                existingRating.ReviewDate = ratingDto.ReviewDate;
                 _context.UserRatingReviews.Update(existingRating);
             }
             else
@@ -71,7 +72,8 @@ namespace BusinessLayer.Services
                     UserId = ratingDto.UserId,
                     Tconst = ratingDto.TConst,
                     Rating = ratingDto.Rating,
-                    Review = ratingDto.Review
+                    Review = ratingDto.Review,
+                    ReviewDate = ratingDto.ReviewDate
                 };
                 _context.UserRatingReviews.Add(userRating);
             }

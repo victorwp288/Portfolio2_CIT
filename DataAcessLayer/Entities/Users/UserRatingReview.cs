@@ -21,7 +21,7 @@ namespace DataAcessLayer.Entities.Users
         [Range(1, 10)] // Data annotation for rating range
         public int Rating { get; set; }
 
-        public string Review { get; set; }
+        public string? Review { get; set; }
 
         [DataType(DataType.DateTime)]
         public DateTime ReviewDate { get; set; }
