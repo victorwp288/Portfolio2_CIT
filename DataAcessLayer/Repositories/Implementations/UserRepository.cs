@@ -2,6 +2,7 @@
 using DataAcessLayer.Entities.Users;
 using DataAcessLayer.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using DataAcessLayer.HashClass;
 using Npgsql;
 namespace DataAcessLayer.Repositories.Implementations
 {
@@ -36,28 +37,42 @@ namespace DataAcessLayer.Repositories.Implementations
 
         public async Task RegisterUserAsync(string username, string email, string password)
         {
+            // Validate password length
+            if (string.IsNullOrWhiteSpace(password) || password.Length < 8)
+            {
+                throw new ArgumentException("Password must be at least 8 characters long.");
+            }
+
+            // Create an instance of the hasher
+            var hasher = new Hasher();
+
+            // Generate hashed password and salt
+            var (hashedPassword, salt) = hasher.HashPassword(password);
+
             if (_context != null)
             {
                 var user = new User
                 {
                     Username = username,
                     Email = email,
-                    PasswordHash = password,
+                    PasswordHash = hashedPassword,
+                    Salt = salt, // Store the salt in the database
                     CreatedAt = DateTime.UtcNow,
-                    Role = UserRole.user // Fixing the type conversion issue
+                    Role = UserRole.user
                 };
                 await _context.Users.AddAsync(user);
                 await _context.SaveChangesAsync();
             }
             else
             {
-                const string sql = "SELECT register_user(@username, @email, @password)";
+                const string sql = "SELECT register_user(@username, @email, @hashedPassword, @salt)";
                 var parameters = new[]
                 {
-                    new NpgsqlParameter("@username", username),
-                    new NpgsqlParameter("@email", email),
-                    new NpgsqlParameter("@password", password)
-                };
+    new NpgsqlParameter("@username", username),
+    new NpgsqlParameter("@email", email),
+    new NpgsqlParameter("@hashedPassword", hashedPassword),
+    new NpgsqlParameter("@salt", salt)
+};
 
                 await ExecuteScalarAsync<object>(sql, parameters);
             }
