@@ -50,7 +50,7 @@ public class ImdbContext : DbContext
         if (!optionsBuilder.IsConfigured)
         {
             optionsBuilder.LogTo(Console.WriteLine, Microsoft.Extensions.Logging.LogLevel.Information);
-            optionsBuilder.UseNpgsql("host=localhost;db=imdb;uid=postgres;pwd=Hejmed12!");
+            //optionsBuilder.UseNpgsql("host=localhost;db=imdb;uid=postgres;pwd=Hejmed12!");
 
             optionsBuilder.UseNpgsql("host=localhost;db=imdb;uid=postgres;pwd=2409");
         }
@@ -255,29 +255,29 @@ public class ImdbContext : DbContext
             .WithOne(pk => pk.TitleBasic)
             .HasForeignKey(pk => pk.Tconst);
 
-        // Configure one-to-many relationship between NameBasic and PersonProfession
-        modelBuilder.Entity<NameBasic>()
-            .HasMany(nb => nb.PersonProfessions)
-            .WithOne(pp => pp.NameBasic)
-            .HasForeignKey(pp => pp.Nconst);
-
         // Configure one-to-one relationship between NameBasic and NameRating
         modelBuilder.Entity<NameBasic>()
             .HasOne(nb => nb.NameRatings)
             .WithOne(nr => nr.NameBasic)
             .HasForeignKey<NameRating>(nr => nr.Nconst);
 
-        // Configure one-to-many relationship between NameBasic and PersonKnownTitle
-        modelBuilder.Entity<NameBasic>()
-            .HasMany(nb => nb.PersonKnownTitles)
-            .WithOne(pk => pk.NameBasic)
-            .HasForeignKey(pk => pk.Nconst);
-
         // Configure one-to-many relationship between NameBasic and TitlePrincipal
         modelBuilder.Entity<NameBasic>()
             .HasMany(nb => nb.TitlePrincipals)
             .WithOne(tp => tp.NameBasic)
             .HasForeignKey(tp => tp.Nconst);
+
+        // Configure one-to-many relationship between NameBasic and PersonProfession
+        modelBuilder.Entity<NameBasic>()
+            .HasMany(nb => nb.PersonProfessions)
+            .WithOne(pp => pp.NameBasic)
+            .HasForeignKey(pp => pp.Nconst);
+
+        // Configure one-to-many relationship between NameBasic and PersonKnownTitle
+        modelBuilder.Entity<NameBasic>()
+            .HasMany(nb => nb.PersonKnownTitles)
+            .WithOne(pk => pk.NameBasic)
+            .HasForeignKey(pk => pk.Nconst);
 
         // Add enum mapping
         modelBuilder.HasPostgresEnum<UserRole>();

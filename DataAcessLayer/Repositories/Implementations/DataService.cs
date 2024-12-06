@@ -186,14 +186,34 @@ namespace DataAcessLayer.Repositories.Implementations
             return _context.NameBasics.ToList();
         }
 
-        public NameBasic GetNameBasicByNconst(string nConst)
-        {
+        public NameBasic GetNameBasicByNconst(string nConst) {
+            try 
+            { 
+                var result = _context.NameBasics.Include(x => x.TitlePrincipals)
+                     //.Include(x => x.PersonKnownTitles)
+                     //.Include(x => x.PersonProfessions)
+                     .Include(x => x.NameRatings)
+                     .FirstOrDefault(x => x.Nconst == nConst);
+                result.PersonKnownTitles = GetPersonKnownTitlesByNconst(nConst);
+                result.PersonProfessions = GetPersonProfessionsByNconst(nConst);
+                return result;
+            }
+            catch (Exception ex)
+            {
+                // Log the exception
+                Console.WriteLine("Error executing SQL: " + ex.Message);
+                return null;
+            }
+        }
 
-            return _context.NameBasics.Include(x => x.PersonProfessions)
-                .Include(x => x.PersonKnownTitles)
-                .Include(x => x.TitlePrincipals)
-                .Include(x => x.NameRatings)
-                .FirstOrDefault(x => x.Nconst == nConst);
+        public IList<PersonKnownTitle> GetPersonKnownTitlesByNconst(string nConst)
+        {
+            return _context.PersonKnownTitles.Where(x => x.Nconst == nConst).ToList();
+        }
+
+        public IList<PersonProfession> GetPersonProfessionsByNconst(string nConst)
+        {
+            return _context.PersonProfessions.Where(x => x.Nconst == nConst).ToList();
         }
 
         public string CallFunctionReturnsString(string sql)
