@@ -50,9 +50,11 @@ public class ImdbContext : DbContext
         if (!optionsBuilder.IsConfigured)
         {
             optionsBuilder.LogTo(Console.WriteLine, Microsoft.Extensions.Logging.LogLevel.Information);
+
             //optionsBuilder.UseNpgsql("host=localhost;db=imdb;uid=postgres;pwd=Hejmed12!");
 
-            optionsBuilder.UseNpgsql("host=localhost;db=imdb;uid=postgres;pwd=2409");
+
+            //optionsBuilder.UseNpgsql("host=localhost;db=imdb;uid=postgres;pwd=2409");
         }
     }
 
@@ -66,6 +68,7 @@ public class ImdbContext : DbContext
         modelBuilder.Entity<User>().Property(x => x.Email).HasColumnName("email");
         modelBuilder.Entity<User>().Property(x => x.PasswordHash).HasColumnName("password_hash");
         modelBuilder.Entity<User>().Property(x => x.CreatedAt).HasColumnName("created_at");
+        modelBuilder.Entity<User>().Property(x => x.Salt).HasColumnName("salt");
         modelBuilder.Entity<User>().Property(x => x.Role)
             .HasColumnName("role")
             .HasColumnType("user_role");
