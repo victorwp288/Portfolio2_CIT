@@ -18,6 +18,33 @@ namespace DataAcessLayer.Repositories.Implementations
 
         public async Task<bool> LoginUserAsync(string username, string password)
         {
+            // Retrieve user by username
+            var user = await _context.Users
+                .FirstOrDefaultAsync(u => u.Username == username);
+
+            if (user == null)
+            {
+                // User not found
+                return false;
+            }
+
+            // Now we have the hashed password and salt from the database
+            var hasher = new Hasher();
+            bool isVerified = hasher.VerifyPassword(password, user.PasswordHash, user.Salt);
+
+            const string sql = "SELECT login_user(@username, @password)";
+            var parameters = new[]
+            {
+                new NpgsqlParameter("@username", username),
+                new NpgsqlParameter("@password", password)
+            };
+
+            return await ExecuteScalarAsync<bool>(sql, parameters);
+        }
+
+
+        /*public async Task<bool> LoginUserAsync(string username, string password)
+        {
             if (_context != null)
             {
                 var user = await _context.Users
@@ -33,7 +60,7 @@ namespace DataAcessLayer.Repositories.Implementations
             };
 
             return await ExecuteScalarAsync<bool>(sql, parameters);
-        }
+        }*/
 
         public async Task RegisterUserAsync(string username, string email, string password)
         {
@@ -68,10 +95,10 @@ namespace DataAcessLayer.Repositories.Implementations
                 const string sql = "SELECT register_user(@username, @email, @hashedPassword, @salt)";
                 var parameters = new[]
                 {
-    new NpgsqlParameter("@username", username),
-    new NpgsqlParameter("@email", email),
-    new NpgsqlParameter("@hashedPassword", hashedPassword),
-    new NpgsqlParameter("@salt", salt)
+                    new NpgsqlParameter("@username", username),
+                    new NpgsqlParameter("@email", email),
+                    new NpgsqlParameter("@hashedPassword", hashedPassword),
+                    new NpgsqlParameter("@salt", salt)
 };
 
                 await ExecuteScalarAsync<object>(sql, parameters);

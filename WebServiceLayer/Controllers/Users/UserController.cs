@@ -24,6 +24,7 @@ using DataAcessLayer.Context;
 using System.ComponentModel.DataAnnotations;
 using DataAcessLayer.Entities.Users;
 using BusinessLayer.Services;
+using DataAcessLayer.HashClass;
 
 namespace WebServiceLayer.Controllers.Users;
 
@@ -33,6 +34,7 @@ namespace WebServiceLayer.Controllers.Users;
 public class UserController : BaseController
 {
     private readonly IConfiguration _configuration;
+    IHasherService _hasherService;
     IDataService _dataService;
     IBookmarkService _bookmarkService;
     IUserService _userService;
@@ -44,8 +46,9 @@ public class UserController : BaseController
 
     public UserController(
         IConfiguration configuration,
+        IHasherService hasherService,
         ITitleService titleService,
-    IDataService dataService,
+        IDataService dataService,
         IUserService userService,
         IBookmarkService bookmarkService,
         ISearchService searchService,
@@ -54,6 +57,7 @@ public class UserController : BaseController
         : base(linkGenerator)
     {
         _configuration = configuration;
+        _hasherService = hasherService;
         _dataService = dataService;
         _bookmarkService = bookmarkService;
         _userService = userService;
@@ -84,12 +88,7 @@ public class UserController : BaseController
 
             Console.WriteLine($"Found user - Username: {user.Username}, StoredPassword: {user.PasswordHash}");
 
-            // Check password match
-            if (user.PasswordHash != model.Password)
-            {
-                Console.WriteLine("Password mismatch");
-                return Unauthorized(new { message = "Invalid username or password" });
-            }
+            _userService.LoginUserAsync(model.UserName, model.Password);
 
             // Generate JWT token
             var token = GenerateJwtToken(user);

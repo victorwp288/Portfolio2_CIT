@@ -8,6 +8,7 @@
     using Npgsql;
     using System;
     using System.Threading.Tasks;
+    using DataAcessLayer.HashClass;
 
 
     // Adjusted namespace for User
@@ -52,7 +53,26 @@
             }
         }
 
-        public async Task<UserDTO> AuthenticateUserAsync(string email, string password)
+        public async Task<bool> LoginUserAsync(string username, string password)
+        {
+            // Retrieve user by username
+            var user = await _context.Users
+                .FirstOrDefaultAsync(u => u.Username == username);
+
+            if (user == null)
+            {
+                // User not found
+                return false;
+            }
+
+            // Now we have the hashed password and salt from the database
+            var hasher = new Hasher();
+            bool isVerified = hasher.VerifyPassword(password, user.PasswordHash, user.Salt);
+
+            return isVerified;
+        }
+
+        /*public async Task<UserDTO> AuthenticateUserAsync(string email, string password)
         {
             // Retrieve the user by email
             var user = await _context.Users.SingleOrDefaultAsync(u => u.Email == email);
@@ -73,7 +93,7 @@
             };
 
             return userDto;
-        }
+        }*/
 
         public async Task<UserDTO> GetUserByIdAsync(int userId)
         {

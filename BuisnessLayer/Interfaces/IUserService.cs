@@ -6,7 +6,8 @@
     public interface IUserService
     {
         Task<UserDTO> RegisterUserAsync(UserRegistrationDTO registrationDto);
-        Task<UserDTO> AuthenticateUserAsync(string email, string password);
+        Task<bool> LoginUserAsync(string username, string password);
+        //Task<UserDTO> AuthenticateUserAsync(string email, string password);
         Task<UserDTO> GetUserByIdAsync(int userId);
         Task UpdateUserAsync(UserUpdateDTO updateDto);
         Task DeleteUserAsync(int userId);

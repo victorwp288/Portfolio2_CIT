@@ -50,9 +50,13 @@ public class ImdbContext : DbContext
         if (!optionsBuilder.IsConfigured)
         {
             optionsBuilder.LogTo(Console.WriteLine, Microsoft.Extensions.Logging.LogLevel.Information);
+<<<<<<< Updated upstream
 
             //optionsBuilder.UseNpgsql("host=localhost;db=imdb;uid=postgres;pwd=Hejmed12!");
 
+=======
+            optionsBuilder.UseNpgsql("host=localhost;db=imdb;uid=postgres;pwd=Ferieland128");
+>>>>>>> Stashed changes
 
             //optionsBuilder.UseNpgsql("host=localhost;db=imdb;uid=postgres;pwd=2409");
         }

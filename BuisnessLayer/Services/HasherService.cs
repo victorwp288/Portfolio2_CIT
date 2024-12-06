@@ -1,10 +1,14 @@
 ﻿using System;
 using System.Security.Cryptography;
 using System.Text;
+using BuisnessLayer.DTOs;
+using BuisnessLayer.Interfaces;
+using DataAcessLayer.Context;
 
-namespace DataAcessLayer.HashClass;
 
-public class Hasher
+namespace BusinessLayer.Services;
+
+public class HasherService : IHasherService
 {
     private const int SaltBitSize = 64; // Salt size in bits
     private const int Iterations = 1000; // Number of iterations for the hash
@@ -28,11 +32,12 @@ public class Hasher
 
     public bool VerifyPassword(string password, string storedHash, string salt)
     {
+
         string computedHash = ComputeIterativeHash(password, salt);
         return storedHash == computedHash;
     }
 
-    private string ComputeIterativeHash(string password, string salt)
+    public string ComputeIterativeHash(string password, string salt)
     {
         byte[] inputBytes = Encoding.UTF8.GetBytes(salt + password);
         byte[] hashBytes = inputBytes;
