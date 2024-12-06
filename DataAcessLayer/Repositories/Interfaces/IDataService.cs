@@ -69,4 +69,8 @@ public interface IDataService
     NameBasic GetNameBasicByNconst(string nConst);
 
     IEnumerable<UserBookmark> GetUserBookmerksByUserId(int id);
+
+    public IList<PersonKnownTitle> GetPersonKnownTitlesByNconst(string nConst);
+
+    public IList<PersonProfession> GetPersonProfessionsByNconst(string nConst);
 }

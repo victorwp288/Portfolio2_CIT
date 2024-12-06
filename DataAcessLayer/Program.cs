@@ -11,6 +11,7 @@ using DataAcessLayer.Context;
 using Microsoft.EntityFrameworkCore;
 using DataAcessLayer.Entities.Users;
 using DataAcessLayer.Repositories.Implementations;
+using DataAcessLayer.Entities.Movies;
 
 namespace DataAcessLayer
 {
@@ -57,22 +58,36 @@ namespace DataAcessLayer
 
             Console.WriteLine(sql);*/
 
-
             var outPut = ds.GetNameBasicByNconst("nm0000129");
+
+            /*var pkt = ds.GetPersonKnownTitlesByNconst("nm0000129");
+            //var pp = ds.GetPersonProfessionsByNconst("nm0000129");
+            //outPut.PersonProfessions=pp;
+            //outPut.PersonKnownTitles=pkt;
+            Console.WriteLine(pkt.Count());
+            Console.WriteLine(pkt.First().Tconst);
+            Console.WriteLine(pp.Count());
+            Console.WriteLine(pp.First().Profession);*/
+
             Console.WriteLine(outPut.PrimaryName);
             Console.WriteLine(outPut.PersonProfessions.Count());
             Console.WriteLine(outPut.PersonKnownTitles.Count());
             Console.WriteLine(outPut.TitlePrincipals.Count());
             Console.WriteLine(outPut.BirthYear);
             Console.WriteLine(outPut.NameRatings.WeightedRating);
+            Console.WriteLine(outPut.TitlePrincipals.First().Tconst);
+            Console.WriteLine(outPut.PersonProfessions.First().Profession);
+            Console.WriteLine(outPut.PersonKnownTitles.First().Tconst);
 
 
+            /*
             var outPut2 = ds.GetTitleBasic("tt21880152");
             Console.WriteLine(outPut2.PrimaryTitle);
             Console.WriteLine(outPut2.TitleRating.AverageRating);
             Console.WriteLine(outPut2.PersonKnownTitles.First().Nconst);
             Console.WriteLine(outPut2.MovieGenres.First().Genre);
-            Console.WriteLine(ds.GetNumberOfTitleBasics());
+            Console.WriteLine(ds.GetNumberOfTitleBasics());*/
+
 
         }
 
