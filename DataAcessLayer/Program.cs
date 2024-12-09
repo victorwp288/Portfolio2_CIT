@@ -12,6 +12,8 @@ using Microsoft.EntityFrameworkCore;
 using DataAcessLayer.Entities.Users;
 using DataAcessLayer.Repositories.Implementations;
 using DataAcessLayer.Entities.Movies;
+using System.Threading.Tasks; 
+
 
 namespace DataAcessLayer
 {
@@ -23,6 +25,8 @@ namespace DataAcessLayer
             // Your program logic goes here 
             Console.WriteLine("Hello, world!");
             var ds = new DataService(context);
+            RunNameBasicRetrievalAsync().Wait();
+            Console.WriteLine("Program finished.");
             /*var item = ds.GetUserById(1);
             if (item == null)
             {
@@ -67,7 +71,7 @@ namespace DataAcessLayer
             Console.WriteLine(pkt.Count());
             Console.WriteLine(pkt.First().Tconst);
             Console.WriteLine(pp.Count());
-            Console.WriteLine(pp.First().Profession);*/
+            Console.WriteLine(pp.First().Profession);
 
             Console.WriteLine(outPut.PrimaryName);
             Console.WriteLine(outPut.PersonProfessions.Count());
@@ -89,6 +93,44 @@ namespace DataAcessLayer
             Console.WriteLine(ds.GetNumberOfTitleBasics());*/
 
 
+        }
+        static async Task RunNameBasicRetrievalAsync()
+        {
+            try
+            {
+                var context = new ImdbContext();
+                // Your program logic goes here 
+                Console.WriteLine("Hello, world!");
+                var ds = new DataService(context);
+                // Call your async data access method
+                var outPut = await ds.GetNameBasicByNconst("nm0000129");
+                //Process Results
+                if (outPut != null)
+                {
+                    Console.WriteLine($"Primary Name: {outPut.PrimaryName}");
+                    // ... process other properties ...
+                    //Console.WriteLine(outPut.PrimaryName);
+                    Console.WriteLine(outPut.PersonProfessions.Count());
+                    Console.WriteLine(outPut.PersonKnownTitles.Count());
+                    Console.WriteLine(outPut.TitlePrincipals.Count());
+                    Console.WriteLine(outPut.BirthYear);
+                    Console.WriteLine(outPut.NameRatings);
+                    Console.WriteLine(outPut.NameRatings.WeightedRating);
+                    Console.WriteLine(outPut.TitlePrincipals.First().Tconst);
+                    Console.WriteLine(outPut.TitlePrincipals.First().Tconst.Count());
+                    Console.WriteLine(outPut.PersonProfessions.First().Profession);
+                    Console.WriteLine(outPut.PersonKnownTitles.First().Tconst);
+                }
+                else
+                {
+                    Console.WriteLine("NameBasic not found.");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"An error occurred: {ex.Message}");
+                //Handle exception appropriately
+            }
         }
 
     }

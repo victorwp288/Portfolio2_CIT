@@ -1,9 +1,15 @@
 @WebServiceLayer_HostAddress = http://localhost:5001
 
-GET {{WebServiceLayer_HostAddress}}/weatherforecast/
+Get https://localhost:5001/api/users/person/tt0325710
 Accept: application/json
 
-###
+-####
+GET https://localhost:5001/api/movies/tt0325710
+Accept:application/json
 
-Get {{WebServiceLayer_HostAddress}}/api/movies
+-###
+
+GET https://localhost:5001/api/movies/tt0325710
 Accept: application/json
+
+

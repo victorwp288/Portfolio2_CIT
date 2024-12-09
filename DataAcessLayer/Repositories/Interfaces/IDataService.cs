@@ -64,13 +64,14 @@ public interface IDataService
 
     IList<SearchName> FunctionSearchName(string pSearchText);
 
-    public IList<NameBasic> GetNameBasics();
+    IList<NameBasic> GetNameBasics();
 
-    NameBasic GetNameBasicByNconst(string nConst);
-
+   
     IEnumerable<UserBookmark> GetUserBookmerksByUserId(int id);
 
-    public IList<PersonKnownTitle> GetPersonKnownTitlesByNconst(string nConst);
+    Task<NameBasic> GetNameBasicByNconst(string nConst);
+    
+    Task<IList<PersonKnownTitle>> GetPersonKnownTitlesByNconst(string nConst);
 
-    public IList<PersonProfession> GetPersonProfessionsByNconst(string nConst);
+    Task<IList<PersonProfession>> GetPersonProfessionsByNconst(string nConst);
 }
