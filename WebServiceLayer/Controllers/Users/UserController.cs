@@ -251,21 +251,15 @@ public class UserController : BaseController
     [HttpGet("person/{nconst}")]
     public async Task<IActionResult> GetPersonDetailsByNconst(string nconst)
     {
-        var personDet = _service.GetNameBasicByNconst(nconst);
+        var personDet = await _service.GetNameBasicByNconst(nconst);
         if (personDet != null)
         {
-            //Console.WriteLine(personDet); //This line will work now
-            //Console.WriteLine(personDet); //This line will work now
             var model = personDet.Adapt<PersonDetailsModel>();
             return Ok(model);
         }
         else
         {
-            // Handle the case where no person was found.  Several options:
-            return NotFound(); // Return a 404 Not Found status code
-                               //return BadRequest(); //Return a 400 Bad Request status code
-                               //return Ok(new PersonDetailsModel()); //Return an empty PersonDetailsModel
-                               //throw new Exception("Person not found."); //If you want to handle this as an error
+            return NotFound(); 
         }
     }
 }
