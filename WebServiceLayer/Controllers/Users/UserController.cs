@@ -234,20 +234,5 @@ public class UserController : BaseController
         );
 
         return new JwtSecurityTokenHandler().WriteToken(token);
-    }
-
-    [HttpGet("person/{nconst}")]
-    public async Task<IActionResult> GetPersonDetailsByNconst(string nconst)
-    {
-        var personDet = await _service.GetNameBasicByNconst(nconst);
-        if (personDet != null)
-        {
-            var model = personDet.Adapt<PersonController>();
-            return Ok(model);
-        }
-        else
-        {
-            return NotFound(); 
-        }
-    }
+    }    
 }
