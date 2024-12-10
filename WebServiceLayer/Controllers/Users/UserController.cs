@@ -5,25 +5,13 @@ using BusinessLayer.DTOs;
 using WebServiceLayer.Models.Users;
 using WebServiceLayer.Models.Movies;
 using DataAcessLayer;
-using DataAccessLayer.Repositories.Implementations;
-using DataAcessLayer.Repositories.Interfaces;
 using BuisnessLayer.Interfaces;
-using BuisnessLayer.DTOs;
 using DataAcessLayer.Repositories.Implementations;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
-using System.Text;
-using System.Security.Claims;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
 using DataAcessLayer.Context;
-using System.ComponentModel.DataAnnotations;
-using DataAcessLayer.Entities.Users;
-using BusinessLayer.Services;
 
 namespace WebServiceLayer.Controllers.Users;
 
@@ -254,7 +242,7 @@ public class UserController : BaseController
         var personDet = await _service.GetNameBasicByNconst(nconst);
         if (personDet != null)
         {
-            var model = personDet.Adapt<PersonDetailsModel>();
+            var model = personDet.Adapt<PersonController>();
             return Ok(model);
         }
         else

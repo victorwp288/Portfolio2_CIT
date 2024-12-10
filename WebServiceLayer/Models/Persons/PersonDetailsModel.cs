@@ -2,9 +2,9 @@ using DataAcessLayer.Entities.Movies;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 
-namespace WebServiceLayer.Models.Users;
+namespace WebServiceLayer.Models.Persons;
 
-public class PersonController
+public class PersonDetailsModel
 {
     
     //public string? Nconst { get; set; }
