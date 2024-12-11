@@ -4,6 +4,7 @@ using DataAcessLayer.Entities.Movies;
 using DataAcessLayer.Entities.Users;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
+using System.Threading.Tasks;
 
 namespace DataAcessLayer.Repositories.Implementations
 {
@@ -26,10 +27,26 @@ namespace DataAcessLayer.Repositories.Implementations
             return _context.Users.Find(id);
         }
 
+        public async Task<User> GetUserByUserNameAsync(string userName)
+        {
+            try
+            {
+                
+                return await _context.Users.FirstOrDefaultAsync(u => u.Username == userName);
+
+            }
+            catch (Exception ex)
+            {
+                Console.Error.WriteLine($"Error getting user by username '{userName}': {ex.Message}");
+                return null; 
+            }
+        }
+
         public IEnumerable<UserBookmark> GetUserBookmerksByUserId(int id)
         {
             return _context.UserBookmarks.Where(x => x.UserId == id);
         }
+        
 
         public bool FunctionLoginUser(string inputUsername, string inputPassword)
         {
@@ -186,34 +203,36 @@ namespace DataAcessLayer.Repositories.Implementations
             return _context.NameBasics.ToList();
         }
 
-        public NameBasic GetNameBasicByNconst(string nConst) {
+        public async Task<NameBasic> GetNameBasicByNconst(string nConst) {
             try 
             { 
-                var result = _context.NameBasics.Include(x => x.TitlePrincipals)
+                var result = await _context.NameBasics.Include(x => x.TitlePrincipals)
                      //.Include(x => x.PersonKnownTitles)
                      //.Include(x => x.PersonProfessions)
                      .Include(x => x.NameRatings)
-                     .FirstOrDefault(x => x.Nconst == nConst);
-                result.PersonKnownTitles = GetPersonKnownTitlesByNconst(nConst);
-                result.PersonProfessions = GetPersonProfessionsByNconst(nConst);
+                     .FirstOrDefaultAsync(x => x.Nconst == nConst);
+                if (result != null)
+                {
+                    result.PersonKnownTitles = await GetPersonKnownTitlesByNconst(nConst);
+                    result.PersonProfessions = await GetPersonProfessionsByNconst(nConst);
+                }
+
                 return result;
             }
             catch (Exception ex)
             {
-                // Log the exception
                 Console.WriteLine("Error executing SQL: " + ex.Message);
-                return null;
+                return null; // or throw the exception, depending on your error handling strategy.
             }
         }
-
-        public IList<PersonKnownTitle> GetPersonKnownTitlesByNconst(string nConst)
+        public async Task<IList<PersonKnownTitle>> GetPersonKnownTitlesByNconst(string nConst)
         {
-            return _context.PersonKnownTitles.Where(x => x.Nconst == nConst).ToList();
+            return await _context.PersonKnownTitles.Where(x => x.Nconst == nConst).ToListAsync();
         }
 
-        public IList<PersonProfession> GetPersonProfessionsByNconst(string nConst)
+        public async Task<IList<PersonProfession>> GetPersonProfessionsByNconst(string nConst)
         {
-            return _context.PersonProfessions.Where(x => x.Nconst == nConst).ToList();
+            return await _context.PersonProfessions.Where(x => x.Nconst == nConst).ToListAsync();
         }
 
         public string CallFunctionReturnsString(string sql)

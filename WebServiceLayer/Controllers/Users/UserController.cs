@@ -3,28 +3,14 @@ using Mapster;
 using BusinessLayer.Interfaces;
 using BusinessLayer.DTOs;
 using WebServiceLayer.Models.Users;
-using WebServiceLayer.Models.Movies;
 using DataAcessLayer;
-using DataAccessLayer.Repositories.Implementations;
-using DataAcessLayer.Repositories.Interfaces;
 using BuisnessLayer.Interfaces;
-using BuisnessLayer.DTOs;
 using DataAcessLayer.Repositories.Implementations;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
-using System.Text;
-using System.Security.Claims;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
-using DataAcessLayer.Context;
-using System.ComponentModel.DataAnnotations;
-using DataAcessLayer.Entities.Users;
-using BusinessLayer.Services;
-using DataAcessLayer.HashClass;
+
 
 namespace WebServiceLayer.Controllers.Users;
 
@@ -39,7 +25,6 @@ public class UserController : BaseController
     IBookmarkService _bookmarkService;
     IUserService _userService;
     ISearchService _searchService;
-    private readonly ImdbContext _context;
     private readonly LinkGenerator _linkGenerator;
     private DataService _service;
     ITitleService _titleService;
@@ -52,8 +37,7 @@ public class UserController : BaseController
         IUserService userService,
         IBookmarkService bookmarkService,
         ISearchService searchService,
-        LinkGenerator linkGenerator,
-        ImdbContext context)
+        LinkGenerator linkGenerator)
         : base(linkGenerator)
     {
         _configuration = configuration;
@@ -63,23 +47,19 @@ public class UserController : BaseController
         _userService = userService;
         _linkGenerator = linkGenerator;
         _searchService = searchService;
-        _context = context;
-        _service = new DataService(_context);
     }
 
 
     // Login method
     [HttpPost("login")]
-    public IActionResult Login([FromBody] UserLoginModel model)
+    public async Task<IActionResult> Login([FromBody] UserLoginModel model)
     {
         try
         {
             // Log the incoming credentials (for debugging only - remove in production!)
             Console.WriteLine($"Login attempt - Username: {model.UserName}, Password: {model.Password}");
 
-            // Get user details first and log what we find
-            var user = _context.Users.FirstOrDefault(u => u.Username == model.UserName);
-
+            var user = await _dataService.GetUserByUserNameAsync(model.UserName);
             if (user == null)
             {
                 Console.WriteLine("No user found with that username");
@@ -173,7 +153,7 @@ public class UserController : BaseController
 
 
         //await _bookmarkService.CreateBookmarkAsync(userId, tconst, DTO);
-        var result = _service.FunctionAddBookmark(userId, tconst, "n/a");
+        var result = _dataService.FunctionAddBookmark(userId, tconst, "n/a");
 
         if (!result)//|| validTconst == null)
         {
@@ -193,7 +173,7 @@ public class UserController : BaseController
     [HttpGet("{userId}/bookmarks")]
     public async Task<IActionResult> GetUserBookmarks(int userId)
     {
-        var bookmarks = _service.GetUserBookmerksByUserId(userId);
+        var bookmarks = _dataService.GetUserBookmerksByUserId(userId);
         Console.WriteLine(bookmarks.First().Tconst);
         var model = bookmarks.Adapt<IEnumerable<CreateBookmarkModel>>();
         return Ok(model);
@@ -245,5 +225,5 @@ public class UserController : BaseController
         );
 
         return new JwtSecurityTokenHandler().WriteToken(token);
-    }
+    }    
 }
