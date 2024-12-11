@@ -27,10 +27,26 @@ namespace DataAcessLayer.Repositories.Implementations
             return _context.Users.Find(id);
         }
 
+        public async Task<User> GetUserByUserNameAsync(string userName)
+        {
+            try
+            {
+                
+                return await _context.Users.FirstOrDefaultAsync(u => u.Username == userName);
+
+            }
+            catch (Exception ex)
+            {
+                Console.Error.WriteLine($"Error getting user by username '{userName}': {ex.Message}");
+                return null; 
+            }
+        }
+
         public IEnumerable<UserBookmark> GetUserBookmerksByUserId(int id)
         {
             return _context.UserBookmarks.Where(x => x.UserId == id);
         }
+        
 
         public bool FunctionLoginUser(string inputUsername, string inputPassword)
         {

@@ -16,6 +16,8 @@ public interface IDataService
 
     User GetUserById(int id);
 
+    Task<User> GetUserByUserNameAsync(string userName);
+
     public TitleBasic GetTitleBasic(string id);
 
     IList<TitleBasic> GetTitleBasics(int page, int pagesize);
