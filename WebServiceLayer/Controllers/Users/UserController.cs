@@ -67,20 +67,25 @@ public class UserController : BaseController
             }
 
             Console.WriteLine($"Found user - Username: {user.Username}, StoredPassword: {user.PasswordHash}");
+            
+            var logIn = await _userService.LoginUserAsync(model.UserName, model.Password);
 
-            _userService.LoginUserAsync(model.UserName, model.Password);
-
-            // Generate JWT token
-            var token = GenerateJwtToken(user);
-
-            // Return the token and user info
-            return Ok(new
+            if (logIn)
             {
-                token = token,
-                userId = user.UserId,
-                username = user.Username,
-                role = user.Role.ToString()
-            });
+
+                // Generate JWT token
+                var token = GenerateJwtToken(user);
+
+                // Return the token and user info
+                return Ok(new
+                {
+                    token = token,
+                    userId = user.UserId,
+                    username = user.Username,
+                    role = user.Role.ToString()
+                });
+            }
+            else { throw new Exception("Invalid Password"); }
         }
         catch (Exception ex)
         {

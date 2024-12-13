@@ -9,6 +9,7 @@
     using System;
     using System.Threading.Tasks;
     using DataAcessLayer.HashClass;
+    using BuisnessLayer.Interfaces;
 
 
     // Adjusted namespace for User
@@ -17,11 +18,18 @@
     {
         private readonly ImdbContext _context;
         private readonly UserRepository _userRepository;
+        IBookmarkService _bookmarkService;
+        IRatingService _ratingService;
+        IHasherService _hasherService;
 
-        public UserService(ImdbContext context)
+
+        public UserService(ImdbContext context, IBookmarkService bookmarkService, IRatingService ratingService,IHasherService hasherService)
         {
             _context = context;
             _userRepository = new UserRepository(context);
+            _bookmarkService = bookmarkService;
+            _ratingService = ratingService;
+            _hasherService = hasherService;
         }
 
         public async Task<UserDTO> RegisterUserAsync(UserRegistrationDTO registrationDto)
@@ -68,7 +76,7 @@
             // Now we have the hashed password and salt from the database
             var hasher = new Hasher();
             bool isVerified = hasher.VerifyPassword(password, user.PasswordHash, user.Salt);
-
+            Console.WriteLine(isVerified);
             return isVerified;
         }
 
@@ -132,12 +140,34 @@
 
         public async Task DeleteUserAsync(int userId)
         {
-            var user = await _context.Users.FindAsync(userId);
-            if (user == null)
-                throw new KeyNotFoundException("User not found.");
+            using var transaction = await _context.Database.BeginTransactionAsync();
+            try
+            {
+                await _bookmarkService.DeleteAllBookmarksForUserAsync(userId);
+                await _ratingService.DeleteAllRatingsForUserAsync(userId);
 
-            _context.Users.Remove(user);
-            await _context.SaveChangesAsync();
+                var user = await _context.Users.FindAsync(userId);
+                if (user == null)
+                {
+                    throw new KeyNotFoundException("User not found.");
+                }
+
+                _context.Users.Remove(user);
+                await _context.SaveChangesAsync();
+
+                await transaction.CommitAsync();
+            }
+            catch (KeyNotFoundException ex)
+            {
+                await transaction.RollbackAsync();
+                throw; // Re-throw the exception to be handled by the caller.
+            }
+            catch (Exception ex)
+            {
+                await transaction.RollbackAsync();
+                Console.WriteLine($"An error occurred while deleting user {userId}: {ex.Message}");
+                throw;
+            }
         }
 
         // Helper methods for password hashing

@@ -76,6 +76,21 @@ namespace BuisnessLayer.Services;
         await _context.SaveChangesAsync();
     }
 
+    public async Task DeleteAllBookmarksForUserAsync(int userId)
+    {
+        // Get a list of user bookmarks based on user id
+        var userBookmarks = await _context.UserBookmarks
+                            .Where(ub => ub.UserId == userId)
+                            .ToListAsync();
+
+        if (userBookmarks == null || userBookmarks.Count == 0)
+            throw new KeyNotFoundException("No bookmarks found for user.");
+
+        // Remove the list of bookmarks
+        _context.UserBookmarks.RemoveRange(userBookmarks);
+        await _context.SaveChangesAsync();
+    }
+
     public async Task<IEnumerable<BookmarkDTO>> GetUserBookmarksAsync(int userId)
     {
         var bookmarks = await _context.UserBookmarks

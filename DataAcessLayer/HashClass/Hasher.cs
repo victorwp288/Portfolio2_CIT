@@ -29,7 +29,14 @@ public class Hasher
     public bool VerifyPassword(string password, string storedHash, string salt)
     {
         string computedHash = ComputeIterativeHash(password, salt);
-        return storedHash == computedHash;
+
+        if(storedHash == computedHash)
+        {
+            return true;
+        }
+            
+        else 
+            return false;
     }
 
     private string ComputeIterativeHash(string password, string salt)

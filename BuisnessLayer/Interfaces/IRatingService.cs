@@ -8,5 +8,6 @@
         Task SubmitUserRatingAsync(UserRatingDTO ratingDto);
         Task<UserRatingDTO> GetUserRatingAsync(int userId, string tconst);
         Task<IEnumerable<UserRatingDTO>> GetUserRatingsAsync(int userId);
+        Task DeleteAllRatingsForUserAsync(int userId);
     }
 }

@@ -136,5 +136,21 @@ namespace BusinessLayer.Services
                 ReviewDate = r.ReviewDate
             });
         }
+
+
+        public async Task DeleteAllRatingsForUserAsync(int userId)
+        {
+            // Get a list of user Ratings based on user id
+            var userRatings = await _context.UserRatingReviews
+                                .Where(ub => ub.UserId == userId)
+                                .ToListAsync();
+
+            if (userRatings == null || userRatings.Count == 0)
+                throw new KeyNotFoundException("No Ratings found for user.");
+
+            // Remove the list of bookmarks
+            _context.UserRatingReviews.RemoveRange(userRatings);
+            await _context.SaveChangesAsync();
+        }
     }
 }
