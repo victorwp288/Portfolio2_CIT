@@ -9,7 +9,7 @@
         Task<bool> LoginUserAsync(string username, string password);
         //Task<UserDTO> AuthenticateUserAsync(string email, string password);
         Task<UserDTO> GetUserByIdAsync(int userId);
-        Task UpdateUserAsync(UserUpdateDTO updateDto);
+        Task<bool> UpdateUserAsync(UserUpdateDTO updateDto);
         Task DeleteUserAsync(int userId);
     }
 }

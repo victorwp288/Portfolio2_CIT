@@ -117,16 +117,41 @@ namespace DataAcessLayer.Repositories.Implementations
             await ExecuteScalarAsync<object>(sql, parameters);
         }
 
-        public async Task UpdateUserPasswordAsync(int userId, string newPassword)
+        public async Task<bool> UpdateUserPasswordAsync(int userId, string newPassword)
         {
-            const string sql = "SELECT update_user_password(@userId, @newPassword)";
-            var parameters = new[]
-            {
-                new NpgsqlParameter("@userId", userId),
-                new NpgsqlParameter("@newPassword", newPassword)
-            };
+            
 
-            await ExecuteScalarAsync<object>(sql, parameters);
+            try
+            {
+                // Finding the user by their ID
+                var user = await _context.Users.FindAsync(userId);
+                
+                // Creating an instance of the hasher
+                var hasher = new Hasher();
+
+                // Generate hashed password and salt
+                var (hashedPassword, salt) = hasher.HashPassword(newPassword);
+
+                if (user == null)
+                {
+                    // Handle user not found case (e.g. log it, throw exception, return false)
+                    Console.WriteLine($"User with ID {userId} not found.");
+                    return false;
+                }
+
+                // Update Password Hash and Salt
+                user.PasswordHash = hashedPassword;
+                user.Salt = salt;
+
+                // Save Changes 
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error updating user password: {ex.Message}");
+                return false;
+            }
         }
 
         public async Task UpdateUserEmailAsync(int userId, string newEmail)

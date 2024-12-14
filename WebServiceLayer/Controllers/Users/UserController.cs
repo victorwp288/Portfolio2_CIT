@@ -127,8 +127,14 @@ public class UserController : BaseController
 
     //update user
     [HttpPut("{userId}/update")]
+
     public async Task<IActionResult> UpdateUser(int userId, UserUpdateModel model)
     {
+
+        if (model == null || userId <= 0)
+        {
+            return BadRequest("Invalid input model or user ID");//400
+        }
         var dto = new UserUpdateDTO
         {
             UserId = userId,
@@ -136,8 +142,25 @@ public class UserController : BaseController
             Username = model.Username,
             Password = model.Password
         };
-        await _userService.UpdateUserAsync(dto);
-        return Ok();
+
+        try
+        {
+            bool result = await _userService.UpdateUserAsync(dto);
+            if (result)
+            {
+                return Ok("User updated successfully"); //200
+            }
+            else
+            {
+                return NotFound($"User with ID {userId} not found."); //404
+            }
+        }
+        catch (Exception ex)
+        {
+            //Log the exception
+            Console.WriteLine($"Error updating user: {ex.Message}");
+            return StatusCode(500, "An error occurred while updating user");
+        }
     }
 
     //delete user

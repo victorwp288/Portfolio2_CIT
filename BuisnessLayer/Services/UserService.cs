@@ -120,22 +120,17 @@
             return userDto;
         }
 
-        public async Task UpdateUserAsync(UserUpdateDTO updateDto)
+        public async Task<bool> UpdateUserAsync(UserUpdateDTO updateDto)
         {
-            var user = await _context.Users.FindAsync(updateDto.UserId);
-            if (user == null)
-                throw new KeyNotFoundException("User not found.");
+            var result = await _userRepository.UpdateUserPasswordAsync(
+                    updateDto.UserId,
+                    updateDto.Password
+                );
 
-            // Update fields
-            user.Email = updateDto.Email ?? user.Email;
-            user.Username = updateDto.Username ?? user.Username;
-            //user.Password = updateDto.Password ?? user.Password;
+            if(result)
+                return true;
+            else return false;
 
-            // Ensure CreatedAt is in UTC
-            user.CreatedAt = DateTime.SpecifyKind(user.CreatedAt, DateTimeKind.Utc);
-
-            _context.Users.Update(user);
-            await _context.SaveChangesAsync();
         }
 
         public async Task DeleteUserAsync(int userId)
