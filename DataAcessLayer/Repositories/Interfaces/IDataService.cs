@@ -76,4 +76,6 @@ public interface IDataService
     Task<IList<PersonKnownTitle>> GetPersonKnownTitlesByNconst(string nConst);
 
     Task<IList<PersonProfession>> GetPersonProfessionsByNconst(string nConst);
+
+    Task<User> GetUserByEmailAsync(string email);
 }

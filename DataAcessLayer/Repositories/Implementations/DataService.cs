@@ -41,6 +41,20 @@ namespace DataAcessLayer.Repositories.Implementations
                 return null; 
             }
         }
+        public async Task<User> GetUserByEmailAsync(string email)
+        {
+            try
+            {
+
+                return await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
+
+            }
+            catch (Exception ex)
+            {
+                Console.Error.WriteLine($"Error getting user by email '{email}': {ex.Message}");
+                return null;
+            }
+        }
 
         public IEnumerable<UserBookmark> GetUserBookmerksByUserId(int id)
         {

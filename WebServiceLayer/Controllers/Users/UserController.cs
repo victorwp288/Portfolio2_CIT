@@ -63,7 +63,7 @@ public class UserController : BaseController
             if (user == null)
             {
                 Console.WriteLine("No user found with that username");
-                return Unauthorized(new { message = "Invalid username or password" });
+                return Unauthorized(new { message = "Invalid Username" });
             }
 
             Console.WriteLine($"Found user - Username: {user.Username}, StoredPassword: {user.PasswordHash}");
@@ -91,7 +91,7 @@ public class UserController : BaseController
         {
             Console.WriteLine($"Login error: {ex.Message}");
             Console.WriteLine($"Stack trace: {ex.StackTrace}");
-            return StatusCode(500, new { message = "An error occurred during login" });
+            return StatusCode(500, new { message = ex.Message });
         }
     }
 
@@ -108,6 +108,7 @@ public class UserController : BaseController
         var model = CreateUserModel(category);
 
         return Ok(model);
+
     }
 
     //register a new user
@@ -115,14 +116,45 @@ public class UserController : BaseController
     public async Task<IActionResult> CreateUser(CreateUserRegistrationModel model)
     {
 
-        var dto = new UserRegistrationDTO
+        try
         {
-            Email = model.Email,
-            Username = model.Username,
-            Password = model.Password
-        };
-        var user = await _userService.RegisterUserAsync(dto);
-        return Ok(model);
+            
+            var userByUsername = await _dataService.GetUserByUserNameAsync(model.Username);
+            if (userByUsername != null)
+            {
+                Console.WriteLine("An user found with this username");
+                return Unauthorized(new { message = "An user exists with this UserName." });
+            }
+            else
+            {
+                var userByEmail = await _dataService.GetUserByEmailAsync(model.Email);
+                if (userByEmail != null)
+                {
+                    Console.WriteLine("An user found with this email");
+                    return Unauthorized(new { message = "An user exists with this Email." });
+                }
+                else
+                {
+                    var dto = new UserRegistrationDTO
+                    {
+                        Email = model.Email,
+                        Username = model.Username,
+                        Password = model.Password
+                    };
+                    var user = await _userService.RegisterUserAsync(dto);
+                    if(user != null)
+                        return Ok(user);
+                    else
+                        return Unauthorized(new { message = "Something went wrong, Please try later." });
+                }
+
+
+            }
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new { message = ex.Message });
+        }
     }
 
     //update user
@@ -174,13 +206,7 @@ public class UserController : BaseController
     [HttpPost("{userId}/{tconst}/bookmark")]
     public async Task<IActionResult> CreateBookmark(int userId, string tconst, CreateBookmarkModel model)
     {
-        //var DTO = model.Adapt<BookmarkDTO>();
-
-        //var validUser = await _userService.GetUserByIdAsync(userId);
-        //var validTconst = await _titleService.GetTitleByIdAsync(tconst);
-
-
-        //await _bookmarkService.CreateBookmarkAsync(userId, tconst, DTO);
+        
         var result = _dataService.FunctionAddBookmark(userId, tconst, "n/a");
 
         if (!result)//|| validTconst == null)
