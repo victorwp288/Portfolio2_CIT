@@ -145,8 +145,8 @@ namespace BusinessLayer.Services
                                 .Where(ub => ub.UserId == userId)
                                 .ToListAsync();
 
-            if (userRatings == null || userRatings.Count == 0)
-                throw new KeyNotFoundException("No Ratings found for user.");
+            //if (userRatings == null || userRatings.Count == 0)
+                //throw new KeyNotFoundException("No Ratings found for user.");
 
             // Remove the list of bookmarks
             _context.UserRatingReviews.RemoveRange(userRatings);
