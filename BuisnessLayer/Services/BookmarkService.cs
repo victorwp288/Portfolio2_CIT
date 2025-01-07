@@ -83,8 +83,8 @@ namespace BuisnessLayer.Services;
                             .Where(ub => ub.UserId == userId)
                             .ToListAsync();
 
-        if (userBookmarks == null || userBookmarks.Count == 0)
-            throw new KeyNotFoundException("No bookmarks found for user.");
+        //if (userBookmarks == null || userBookmarks.Count == 0)
+            //throw new KeyNotFoundException("No bookmarks found for user.");
 
         // Remove the list of bookmarks
         _context.UserBookmarks.RemoveRange(userBookmarks);
