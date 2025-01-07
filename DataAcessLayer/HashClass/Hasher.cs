@@ -1,5 +1,4 @@
-﻿using System;
-using System.Security.Cryptography;
+﻿using System.Security.Cryptography;
 using System.Text;
 
 namespace DataAcessLayer.HashClass;
@@ -7,7 +6,7 @@ namespace DataAcessLayer.HashClass;
 public class Hasher
 {
     private const int SaltBitSize = 64; // Salt size in bits
-    private const int Iterations = 1000; // Number of iterations for the hash
+    private const int Iterations = 600000; // Number of iterations for the hash
     private const int HashByteSize = 32; // Output hash size in bytes
 
     private readonly RandomNumberGenerator _random = RandomNumberGenerator.Create();
@@ -30,12 +29,12 @@ public class Hasher
     {
         string computedHash = ComputeIterativeHash(password, salt);
 
-        if(storedHash == computedHash)
+        if (storedHash == computedHash)
         {
             return true;
         }
-            
-        else 
+
+        else
             return false;
     }
 
@@ -52,4 +51,3 @@ public class Hasher
         return Convert.ToHexString(hashBytes);
     }
 }
- 

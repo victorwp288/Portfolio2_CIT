@@ -23,8 +23,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Configure Entity Framework Core to use PostgreSQL as the database provider
 builder.Services.AddDbContext<ImdbContext>(options =>
-    options.UseNpgsql("host=localhost;db=imdb;uid=postgres;pwd=2409"));
-
+    options.UseNpgsql(builder.Configuration.GetConnectionString("ImdbDatabase")));
 
 
 // Register IDataService with its implementation, DataService, using scoped lifetime
@@ -41,7 +40,7 @@ builder.Services.AddScoped<IBookmarkService, BookmarkService>();
 builder.Services.AddScoped<IHasherService, HasherService>();
 
 // Get the connection string from ImdbContext
-var connectionString = "host=localhost;db=imdb;uid=postgres;pwd=Ferieland128";
+var connectionString = builder.Configuration.GetConnectionString("ImdbDatabase");
 
 // Register repositories
 builder.Services.AddScoped<IMovieSearchRepository, MovieSearchRepository>();
